@@ -15,12 +15,12 @@
 
             <!-- Image de fond -->
             <ImageView
+                android:id="@+id/imageView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/car"
-                android:scaleType="centerCrop"
                 android:alpha="0.9"
-                />
+                android:scaleType="centerCrop"
+                android:src="@drawable/car" />
 
             <ImageView
                 android:id="@+id/sanse"
@@ -35,32 +35,36 @@
                 android:id="@+id/title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:textColor="@color/white"
                 android:text="Main Fragment"
+                android:textColor="@color/white"
                 android:textSize="23dp"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="@+id/sanse"
-                app:layout_constraintStart_toEndOf="@+id/sanse"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/sanse"
+                app:layout_constraintTop_toTopOf="@+id/sanse" />
 
             <TextView
-                android:id="@+id/description"
+                android:id="@+id/message_from_list"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:text="This app automaticly inflates by android system because this fragment is static"
-                android:textSize="18sp"
+                android:layout_marginTop="100dp"
+                android:text="Messages will display here!"
                 android:textColor="@color/white"
+                android:textSize="18sp"
                 android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/sanse" />
+
             <Button
                 android:id="@+id/button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Click"
-                app:layout_constraintTop_toBottomOf="@id/description"
-                app:layout_constraintStart_toStartOf="@id/description"
-                app:layout_constraintEnd_toEndOf="@id/description"
+                app:layout_constraintTop_toBottomOf="@id/message_from_list"
+                app:layout_constraintStart_toStartOf="@id/message_from_list"
+                app:layout_constraintEnd_toEndOf="@id/message_from_list"
                 android:layout_marginTop="15dp"/>
         </androidx.constraintlayout.widget.ConstraintLayout>
 

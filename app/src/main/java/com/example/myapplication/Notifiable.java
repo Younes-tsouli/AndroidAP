@@ -4,4 +4,6 @@ public interface Notifiable {
     void onClick(int numFragment);
     void onDataChange(int numFragment, Object object);
     void onFragmentDisplayed(int fragmentId);
+
+    void onIncidentSelected(String elementText);
 }

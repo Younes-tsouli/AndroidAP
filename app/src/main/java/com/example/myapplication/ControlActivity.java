@@ -56,6 +56,20 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
     }
 
     @Override
+    public void onIncidentSelected(String elementText) {
+        Screen1Fragment destinationFragment = new Screen1Fragment(); // c'est le fragment de destination
+        // il faut passer le text de l'element de la liste (dans Screen2) à Screen1 via bundle
+        Bundle args = new Bundle();
+        args.putString("message", elementText);
+        destinationFragment.setArguments(args);
+
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_main, destinationFragment)
+                .addToBackStack(null) // pour le retour en arriere
+                .commit();
+    }
+
+    @Override
     public void onDataChange(int numFragment, Object object) {
 
     }
