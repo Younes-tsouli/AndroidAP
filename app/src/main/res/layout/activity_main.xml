@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@drawable/background_image_beige"
+        android:scaleType="centerCrop"
+        android:id="@+id/background_image"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="35dp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:textSize="30sp"
+        android:text="My Car Crash App"
+        android:textFontWeight="500"/>
+
+    <ImageView
+        android:id="@+id/animation"
+        android:layout_width="366dp"
+        android:layout_height="259dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/default_button"
+        android:text="Default"
+        app:layout_constraintTop_toBottomOf="@+id/animation"
+        app:layout_constraintStart_toStartOf="@+id/animation"
+        android:layout_marginTop="25dp"
+        android:backgroundTint="@color/brown"
+        android:textSize="20sp"/>
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/option_button_1"
+        android:text="Option1"
+        app:layout_constraintTop_toBottomOf="@+id/animation"
+        app:layout_constraintEnd_toEndOf="@+id/animation"
+        android:layout_marginTop="25dp"
+        android:backgroundTint="@color/brown"
+        android:textSize="20sp"/>
+</androidx.constraintlayout.widget.ConstraintLayout>

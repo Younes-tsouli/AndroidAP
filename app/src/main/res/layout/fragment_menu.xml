@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MenuFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Menu"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:background="@color/blue"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/fondmenu">
+
+            <ImageView
+                android:id="@+id/menu_component_0"
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/menu0"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/menu_component_1"
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:layout_marginStart="10dp"
+                android:src="@drawable/menu1"
+                app:layout_constraintStart_toEndOf="@id/menu_component_0"
+                app:layout_constraintTop_toTopOf="@+id/menu_component_0" />
+
+            <ImageView
+                android:id="@+id/menu_component_2"
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/menu2"
+                app:layout_constraintStart_toEndOf="@id/menu_component_1"
+                app:layout_constraintTop_toTopOf="@+id/menu_component_0" />
+
+            <ImageView
+                android:id="@+id/menu_component_3"
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/menu3"
+                app:layout_constraintStart_toEndOf="@id/menu_component_2"
+                app:layout_constraintTop_toTopOf="@+id/menu_component_0" />
+
+            <ImageView
+                android:id="@+id/menu_component_4"
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/menu4"
+                app:layout_constraintStart_toEndOf="@id/menu_component_3"
+                app:layout_constraintTop_toTopOf="@+id/menu_component_0" />
+
+            <ImageView
+                android:id="@+id/menu_component_5"
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/menu5"
+                app:layout_constraintStart_toEndOf="@id/menu_component_4"
+                app:layout_constraintTop_toTopOf="@+id/menu_component_0" />
+
+            <ImageView
+                android:id="@+id/menu_component_6"
+                android:layout_width="40sp"
+                android:layout_height="40sp"
+                android:layout_marginLeft="10dp"
+                android:src="@drawable/menu6"
+                app:layout_constraintStart_toEndOf="@id/menu_component_5"
+                app:layout_constraintTop_toTopOf="@+id/menu_component_0" />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
+
+
+</FrameLayout>
