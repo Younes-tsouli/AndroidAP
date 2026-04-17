@@ -5,7 +5,6 @@ import static androidx.fragment.app.FragmentManager.TAG;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -56,12 +55,12 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
     }
 
     @Override
-    public void onIncidentSelected(String elementText) {
+    public void onIncidentSelected(Issue incident) {
         Screen1Fragment destinationFragment = new Screen1Fragment(); // c'est le fragment de destination
         // il faut passer le text de l'element de la liste (dans Screen2) à Screen1 via bundle
-        Bundle args = new Bundle();
-        args.putString("message", elementText);
-        destinationFragment.setArguments(args);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("my_incident", incident);
+        destinationFragment.setArguments(bundle);
 
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_main, destinationFragment)
@@ -70,9 +69,34 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
     }
 
     @Override
-    public void onDataChange(int numFragment, Object object) {
+    public void onDataChange(int numFragment, Object object, int actionCode, Object argsAction) {
+        // Si ça vient du Fragment 2 (la liste)
+        if (numFragment == 2) {
 
+            // ACTION 1 : Clic sur une ligne pour voir le détail
+            if (actionCode == 1) {
+                Issue incidentRecu = (Issue) object; // Ici on transforme l'Object en Issue
+
+                Screen1Fragment detailFrag = new Screen1Fragment();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("my_incident", incidentRecu);
+                detailFrag.setArguments(bundle);
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.fragment_main, detailFrag)
+                        .addToBackStack(null)
+                        .commit();
+            }
+
+            // ACTION 2 : Changement de la RatingBar
+            if (actionCode == 2) {
+                float nouvelleNote = (float) argsAction; // On récupère le float
+                Issue incidentModifie = (Issue) object;
+                Log.d("DEBUG", "L'incident " + incidentModifie.getTitle() + " a maintenant " + nouvelleNote + " étoiles");
+            }
+        }
     }
+
 
     @Override
     public void onFragmentDisplayed(int fragmentId) {

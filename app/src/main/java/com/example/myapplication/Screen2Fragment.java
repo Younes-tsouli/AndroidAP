@@ -1,67 +1,79 @@
 package com.example.myapplication;
 
+
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import java.util.ArrayList;
+import java.util.List;
 
-public class Screen2Fragment extends Fragment {
+public class Screen2Fragment extends Fragment implements ClickableIssue<Issue> {
 
-    // 1. On crée une variable pour stocker l'activité (le chef d'orchestre)
-    private Notifiable listener;
+    private Notifiable notifiable;
+    private List<Issue> myIssues;
+    private IssueAdapter adapter;
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        // On vérifie que l'activité est bien "Notifiable" (le chef d'orchestre)
         if (context instanceof Notifiable) {
-            // On enregistre l'activité dans notre variable 'listener'
-            this.listener = (Notifiable) context;
-        } else {
-            throw new AssertionError("L'activité doit implémenter Notifiable !");
+            notifiable = (Notifiable) context;
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // 2. On gonfle le layout (on crée la vue)
         View view = inflater.inflate(R.layout.fragment_screen2, container, false);
 
-        // 3. ON EST ICI ! C'est le moment de s'occuper de la liste
+        // 1. On prépare les données (plus tard, elles pourraient venir d'un Singleton)
+        myIssues = new ArrayList<>();
+        myIssues.add(new Issue("Fuite d'eau", "Salle 202 - Inondation", android.R.drawable.ic_dialog_alert, 2.0f));
+        myIssues.add(new Issue("Panne Réseau", "Plus d'internet au 1er", android.R.drawable.ic_dialog_info, 4.0f));
+        myIssues.add(new Issue("Porte bloquée", "Accès parking impossible", android.R.drawable.ic_lock_lock, 1.0f));
 
-        // A. On récupère la ListView qui est dans ton fichier XML
-        ListView myListView = view.findViewById(R.id.my_list_view);
+        // 2. On récupère la ListView
+        ListView listView = view.findViewById(R.id.my_list_view);
 
-        // B. On prépare nos données (la liste des incidents)
-        String[] incidents = {"Fuite d'eau - Salle 202", "Panne réseau - Bureau 10", "Ampoule grillée - Couloir"};
-
-        // C. On crée l'ADAPTER
-        // On lui donne : le contexte, un look par défaut (simple_list_item_1), et nos données
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(
-                getContext(),
-                android.R.layout.simple_list_item_1,
-                incidents
-        );
-
-        // D. On branche l'Adapter à la ListView
-        myListView.setAdapter(adapter);
-
-        // E. On gère le clic sur un élément
-        myListView.setOnItemClickListener((parent, viewItem, position, id) -> {
-            // On récupère le texte de l'élément cliqué
-            String selectedIncident = incidents[position];
-
-            // On appelle la méthode de l'activité via notre interface !
-            if (listener != null) {
-                listener.onIncidentSelected(selectedIncident);
-            }
-        });
+        // 3. On crée l'ADAPTER PERSONNALISÉ
+        // On lui passe 'this' car notre Fragment implémente ClickableIssue
+        adapter = new IssueAdapter(requireContext(), R.layout.item_issue, myIssues, this);
+        // 4. On branche
+        listView.setAdapter(adapter);
 
         return view;
+    }
+
+    // --- Implémentation de ClickableIssue (Le lien avec l'Adapter) ---
+
+    @Override
+    public void onClickItem(List<Issue> items, int itemIndex) {
+        // L'Adapter nous dit qu'on a cliqué sur une ligne
+        Issue selected = items.get(itemIndex);
+
+        // On prévient l'activité d'afficher le détail (Screen1)
+        // actionCode 1 pourrait signifier "Afficher détail"
+        notifiable.onDataChange(2, selected, 1, null);
+    }
+
+    @Override
+    public void onRatingBarChange(int itemIndex, float value, IssueAdapter adapter, List<Issue> items) {
+        // L'Adapter nous dit qu'on a changé les étoiles
+        Issue issue = items.get(itemIndex);
+        issue.setStatus(value); // On met à jour l'objet localement
+
+        // On prévient l'activité que les données ont changé
+        // actionCode 2 pourrait signifier "Mise à jour statut"
+        notifiable.onDataChange(2, issue, 2, value);
+
+        Log.d("DEBUG", "Nouveau statut pour " + issue.getTitle() + " : " + value);
     }
 }

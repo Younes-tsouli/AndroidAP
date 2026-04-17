@@ -33,7 +33,8 @@ public class Screen1Fragment extends Fragment {
         // recuperer le message envoyé par la list (Adapter)
         Bundle args = getArguments();
         if (args != null) {
-            String message = args.getString("message");
+            Issue issue = args.getParcelable("my_incident");
+            String message = issue.getTitle();
             messageHolder.setText(message);
         }
 
