@@ -5,6 +5,7 @@ import static androidx.fragment.app.FragmentManager.TAG;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -93,6 +94,31 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
                 float nouvelleNote = (float) argsAction; // On récupère le float
                 Issue incidentModifie = (Issue) object;
                 Log.d("DEBUG", "L'incident " + incidentModifie.getTitle() + " a maintenant " + nouvelleNote + " étoiles");
+            }
+        }
+        if (numFragment == 3) {
+            Toast.makeText(this, argsAction.toString(), Toast.LENGTH_LONG).show();
+            Issue receivedIssue = (Issue) object;
+
+            // 1. Préparer le nouveau fragment
+            Screen1Fragment detailFrag = new Screen1Fragment();
+            Bundle bundle = new Bundle();
+            bundle.putParcelable("my_incident", receivedIssue);
+            detailFrag.setArguments(bundle);
+
+            // 2. Mettre à jour ton tableau pour que le menu pointe vers cette instance
+            tabFragments[0] = detailFrag;
+
+            // 3. EFFECTUER LA NAVIGATION VISUELLE
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.fragment_main, detailFrag)
+                    .addToBackStack(null)
+                    .commit();
+
+            // 4. SYNCHRONISER LE MENU (Pour que l'icône 0 s'allume)
+            MenuFragment menuFrag = (MenuFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_menu);
+            if (menuFrag != null) {
+                menuFrag.setExternalIndex(0); // On force l'icône "Screen 1"
             }
         }
     }

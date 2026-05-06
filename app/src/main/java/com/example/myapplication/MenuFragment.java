@@ -77,4 +77,12 @@ public class MenuFragment extends Fragment {
             icons[i].setImageResource(ressourceId);
         }
     }
+
+
+    public void setExternalIndex(int i) {
+        currentActivatedIndex = i;
+        if (getView() != null) {
+            rafraichirMenu(getView());
+        }
+    }
 }

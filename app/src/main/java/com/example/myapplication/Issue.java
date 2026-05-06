@@ -3,7 +3,7 @@ package com.example.myapplication;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Issue implements Parcelable {
+public abstract class Issue implements Parcelable {
     private String title;
     private String description;
     private int priorityIcon; // Un ID de ressource (ex: R.drawable.alerte)
@@ -28,17 +28,7 @@ public class Issue implements Parcelable {
     }
 
     // 3. Le Créateur (Indispensable pour Android)
-    public static final Creator<Issue> CREATOR = new Creator<Issue>() {
-        @Override
-        public Issue createFromParcel(Parcel in) {
-            return new Issue(in);
-        }
-
-        @Override
-        public Issue[] newArray(int size) {
-            return new Issue[size];
-        }
-    };
+    // on le supprime (la classe est abstract)
 
     @Override
     public int describeContents() {
@@ -61,4 +51,6 @@ public class Issue implements Parcelable {
     public int getPriorityIcon() { return priorityIcon; }
     public float getStatus() { return status; }
     public void setStatus(float status) { this.status = status; }
+
+    public abstract String getSafetyProtocol();
 }

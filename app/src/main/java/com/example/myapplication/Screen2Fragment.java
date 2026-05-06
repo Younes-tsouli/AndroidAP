@@ -36,9 +36,6 @@ public class Screen2Fragment extends Fragment implements ClickableIssue<Issue> {
 
         // 1. On prépare les données (plus tard, elles pourraient venir d'un Singleton)
         myIssues = new ArrayList<>();
-        myIssues.add(new Issue("Fuite d'eau", "Salle 202 - Inondation", android.R.drawable.ic_dialog_alert, 2.0f));
-        myIssues.add(new Issue("Panne Réseau", "Plus d'internet au 1er", android.R.drawable.ic_dialog_info, 4.0f));
-        myIssues.add(new Issue("Porte bloquée", "Accès parking impossible", android.R.drawable.ic_lock_lock, 1.0f));
 
         // 2. On récupère la ListView
         ListView listView = view.findViewById(R.id.my_list_view);
