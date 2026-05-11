@@ -2,7 +2,7 @@ package com.example.myapplication;
 
 import android.os.Parcel;
 
-public class UrbanIssue extends Issue{
+public class UrbanIssue extends Issue {
 
     public static final Creator<UrbanIssue> CREATOR = new Creator<UrbanIssue>() {
         @Override
@@ -16,8 +16,8 @@ public class UrbanIssue extends Issue{
         }
     };
 
-    public UrbanIssue(String title, String description, int priorityIcon, float status) {
-        super(title, description, priorityIcon, status);
+    public UrbanIssue(String title, String description, Priority priority, Status status) {
+        super(title, description, priority, status);
     }
 
     protected UrbanIssue(Parcel in) {
@@ -26,7 +26,6 @@ public class UrbanIssue extends Issue{
 
     @Override
     public String getSafetyProtocol() {
-        return "ne jetter pas des pierres";
+        return "Enfilez votre gilet de sécurité, balisez la zone avec un triangle à 30 mètres et prévenez les autres usagers.";
     }
-
 }

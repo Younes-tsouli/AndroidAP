@@ -3,12 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="12dp">
+    android:padding="12dp"
+    android:gravity="center_vertical">
 
     <ImageView
         android:id="@+id/item_priority_image"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginEnd="12dp"
         android:src="@android:drawable/ic_dialog_alert" />
 
@@ -22,7 +23,7 @@
             android:id="@+id/item_title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Titre de l'incident"
+            android:text="Titre"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -30,17 +31,21 @@
             android:id="@+id/item_description"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Description courte ici..."
+            android:text="Description"
             android:textColor="#666666" />
 
+        <!-- Suppression du style Small pour permettre l'interaction facile -->
         <RatingBar
             android:id="@+id/item_status_rating"
-            style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
             android:numStars="5"
-            android:stepSize="1.0" />
+            android:stepSize="1.0"
+            android:scaleX="0.7"
+            android:scaleY="0.7"
+            android:transformPivotX="0dp"
+            android:isIndicator="false"
+            android:focusable="false" />
 
     </LinearLayout>
 

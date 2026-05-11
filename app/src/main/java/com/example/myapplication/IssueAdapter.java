@@ -61,7 +61,9 @@ public class IssueAdapter extends ArrayAdapter<Issue> {
         holder.txtTitle.setText(issue.getTitle());
         holder.txtDescription.setText(issue.getDescription());
         holder.imgPriority.setImageResource(issue.getPriorityIcon());
-        holder.ratingStatus.setRating(issue.getStatus());
+        
+        // On récupère la valeur float depuis l'Enum Status
+        holder.ratingStatus.setRating(issue.getStatus().getRating());
 
         // 4. GESTION DES CLICS (Interactions demandées)
 

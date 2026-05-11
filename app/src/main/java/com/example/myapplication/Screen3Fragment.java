@@ -2,16 +2,15 @@ package com.example.myapplication;
 
 import android.content.Context;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.Toast;
+
+import androidx.fragment.app.Fragment;
 
 import com.google.android.material.button.MaterialButtonToggleGroup;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 
 public class Screen3Fragment extends Fragment {
@@ -21,16 +20,14 @@ public class Screen3Fragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (requireActivity() instanceof Notifiable) {
-            notifiable = (Notifiable) requireActivity();
-        }
-        else {
-            throw new AssertionError("L'activité doit implémenter Notifiable !");
+        if (context instanceof Notifiable) {
+            notifiable = (Notifiable) context;
         }
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_screen3, container, false);    // Inflate the layout for this fragment
+        View view = inflater.inflate(R.layout.fragment_screen3, container, false);
 
         MaterialButtonToggleGroup toggleGroup = view.findViewById(R.id.toggleGroup);
         TextInputLayout layoutTitle = view.findViewById(R.id.layoutTitre);
@@ -43,15 +40,22 @@ public class Screen3Fragment extends Fragment {
             } else {
                 accidentFactory = new HighwayFactory();
             }
-            // creer l'incident
+            
             String titre = layoutTitle.getEditText().getText().toString();
             String description = layoutDesc.getEditText().getText().toString();
 
+            // 1. Création via la Factory (qui attache l'EmergencyService)
             Issue issue = accidentFactory.createIssue(titre, description);
-            notifiable.onDataChange(3, issue, 0, issue.getSafetyProtocol());
+            
+            // 2. Sauvegarde dans le dépôt central (Singleton)
+            IssueRepository.getInstance().addIssue(issue);
+            
+            Toast.makeText(getContext(), "Incident signalé !", Toast.LENGTH_SHORT).show();
+
+            // 3. Notification à l'activité pour naviguer vers la liste (index 1)
+            notifiable.onDataChange(3, issue, 0, "Navigation vers la liste");
         });
 
         return view;
     }
-
 }
