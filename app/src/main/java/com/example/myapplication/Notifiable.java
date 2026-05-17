@@ -8,4 +8,5 @@ public interface Notifiable {
 
     void onFragmentDisplayed(int fragmentId);
     void onIncidentSelected(Issue issue);
+
 }

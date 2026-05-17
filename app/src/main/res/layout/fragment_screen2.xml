@@ -1,74 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<!-- Screen 2 — Liste des incidents actifs -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:orientation="vertical"
+    android:background="#FAFAFA">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <!-- ── Top App Bar ── -->
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/light_gray">
+        android:layout_height="60dp"
+        android:orientation="horizontal"
+        android:background="#FFFFFF"
+        android:paddingStart="20dp"
+        android:paddingEnd="16dp"
+        android:gravity="center_vertical"
+        android:elevation="4dp">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:id="@+id/header"
-            android:background="@color/gray">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10sp"
-                android:padding="10sp"
-                android:text="Emergency"
-                android:textColor="@color/red"
-                android:textSize="30sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@id/header"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <ImageView
-                android:layout_width="30dp"
-                android:layout_height="50dp"
-                android:layout_margin="10sp"
-                android:layout_marginTop="4dp"
-                android:layout_marginEnd="16dp"
-                android:src="@drawable/emergency"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="@id/header"
-                app:layout_constraintTop_toTopOf="@id/header" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:layout_width="4dp"
+            android:layout_height="28dp"
+            android:background="#C62828"
+            android:layout_marginEnd="12dp" />
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/active_incidents"
-            android:text="Active Incidents"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/header"
-            app:layout_constraintBottom_toTopOf="@id/my_list_view"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginStart="20dp"
+            android:layout_weight="1"
+            android:text="EMERGENCY"
+            android:textColor="#C62828"
+            android:textSize="20sp"
             android:textStyle="bold"
-            />
-        <ListView
-            android:layout_width="match_parent"
+            android:letterSpacing="0.08" />
+
+        <ImageView
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:src="@drawable/emergency"
+            app:tint="#C62828" />
+
+    </LinearLayout>
+
+    <!-- ── Label + badge compteur ── -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="10dp"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/active_incidents"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:id="@+id/my_list_view"
-            app:layout_constraintTop_toBottomOf="@+id/active_incidents"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            android:dividerHeight="5dp"
-            android:divider="#ffa0ca12"
-            android:layout_marginTop="10dp"/>
+            android:layout_weight="1"
+            android:text="Incidents Actifs"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            android:textColor="#212121" />
 
+        <!-- Badge rouge compteur -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TOTAL"
+            android:textColor="#C62828"
+            android:textSize="11sp"
+            android:textStyle="bold"
+            android:letterSpacing="0.08"
+            android:layout_marginEnd="8dp" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 
-</FrameLayout>
+    <!-- ── ListView des incidents ── -->
+    <!-- Les items sont peuplés par l'adaptateur Java/Kotlin existant -->
+    <ListView
+        android:id="@+id/my_list_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:divider="#ffa0ca12"
+        android:dividerHeight="3dp"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="16dp"
+        android:clipToPadding="false"
+        android:scrollbars="none" />
+
+</LinearLayout>

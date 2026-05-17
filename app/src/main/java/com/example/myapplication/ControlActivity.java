@@ -106,7 +106,7 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
             bundle.putParcelable("my_incident", receivedIssue);
             detailFrag.setArguments(bundle);
 
-            // 2. Mettre à jour ton tableau pour que le menu pointe vers cette instance
+            // 2. Mettre à jour le tableau pour que le menu pointe vers cette instance
             tabFragments[0] = detailFrag;
 
             // 3. EFFECTUER LA NAVIGATION VISUELLE
