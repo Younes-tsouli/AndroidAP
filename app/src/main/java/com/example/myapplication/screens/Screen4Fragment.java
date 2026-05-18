@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.screens;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -17,15 +19,29 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.example.myapplication.issue.EmergencyService;
+import com.example.myapplication.Notifiable;
+import com.example.myapplication.R;
+
+import java.util.Arrays;
 import java.util.List;
 
 public class Screen4Fragment extends Fragment {
 
     private Notifiable notifiable;
 
+    // ── Statuts disponibles dans le Spinner ───────────────────────────────────
+
+    /** Liste des statuts proposés dans le menu déroulant. */
+    private static final List<String> STATUS_OPTIONS = Arrays.asList(
+            "NIV.3 - CRITIQUE",
+            "NIV.2 - URGENT",
+            "NIV.1 - STABLE",
+            "INFO"
+    );
+
     // ── Niveaux de criticité ───────────────────────────────────────────────────
 
-    /** Extrait le niveau de criticité depuis le texte de l'alerte. */
     private enum Severity {
         CRITIQUE, URGENT, STABLE, INFO;
 
@@ -41,17 +57,15 @@ public class Screen4Fragment extends Fragment {
             return INFO;
         }
 
-        /** Couleur de la barre latérale et du badge. */
         int color() {
             switch (this) {
-                case CRITIQUE: return Color.parseColor("#C62828"); // rouge
-                case URGENT:   return Color.parseColor("#F9A825"); // ambre
-                case STABLE:   return Color.parseColor("#2E7D32"); // vert
-                default:       return Color.parseColor("#757575"); // gris
+                case CRITIQUE: return Color.parseColor("#C62828");
+                case URGENT:   return Color.parseColor("#F9A825");
+                case STABLE:   return Color.parseColor("#2E7D32");
+                default:       return Color.parseColor("#757575");
             }
         }
 
-        /** Fond de l'icône (version claire de la couleur). */
         int iconBackground() {
             switch (this) {
                 case CRITIQUE: return Color.parseColor("#FFEBEE");
@@ -61,13 +75,22 @@ public class Screen4Fragment extends Fragment {
             }
         }
 
-        /** Label court affiché dans le badge. */
         String badge() {
             switch (this) {
                 case CRITIQUE: return "CRITIQUE";
                 case URGENT:   return "URGENT";
                 case STABLE:   return "STABLE";
                 default:       return "INFO";
+            }
+        }
+
+        /** Retourne l'index correspondant dans STATUS_OPTIONS. */
+        int spinnerIndex() {
+            switch (this) {
+                case CRITIQUE: return 0;
+                case URGENT:   return 1;
+                case STABLE:   return 2;
+                default:       return 3;
             }
         }
     }
@@ -80,11 +103,8 @@ public class Screen4Fragment extends Fragment {
         final Severity severity;
 
         Alert(String raw) {
-            // Exemple de format attendu : "CRITIQUE - Accident A9 - 3 véhicules impliqués"
-            // Ou texte libre : on affiche tout dans le titre.
             String[] parts = raw.split(" - ", 3);
             if (parts.length >= 2) {
-                // Le premier segment peut être la criticité ou un titre court
                 Severity s = Severity.parse(parts[0]);
                 if (s != Severity.INFO) {
                     severity = s;
@@ -101,17 +121,31 @@ public class Screen4Fragment extends Fragment {
                 subtitle = "";
             }
         }
+
+        /**
+         * Reconstruit la chaîne brute avec le nouveau statut.
+         * Format : "NIV.X - LABEL - Titre - Sous-titre"
+         */
+        static String rebuildRaw(String newStatus, String title, String subtitle) {
+            StringBuilder sb = new StringBuilder(newStatus).append(" - ").append(title);
+            if (subtitle != null && !subtitle.isEmpty()) {
+                sb.append(" - ").append(subtitle);
+            }
+            return sb.toString();
+        }
     }
 
     // ── Adaptateur personnalisé ───────────────────────────────────────────────
 
-    private static class AlertAdapter extends ArrayAdapter<String> {
+    private class AlertAdapter extends ArrayAdapter<String> {
 
         private final LayoutInflater inflater;
+        private final List<String>   data;
 
         AlertAdapter(@NonNull Context ctx, @NonNull List<String> items) {
             super(ctx, R.layout.item_alert, items);
-            inflater = LayoutInflater.from(ctx);
+            this.inflater = LayoutInflater.from(ctx);
+            this.data     = items;
         }
 
         @NonNull
@@ -132,7 +166,7 @@ public class Screen4Fragment extends Fragment {
 
             Alert alert = new Alert(raw);
 
-            // Textes
+            // ── Textes ────────────────────────────────────────────────────────
             holder.title.setText(alert.title);
             if (alert.subtitle.isEmpty()) {
                 holder.subtitle.setVisibility(View.GONE);
@@ -141,7 +175,7 @@ public class Screen4Fragment extends Fragment {
                 holder.subtitle.setText(alert.subtitle);
             }
 
-            // Couleurs selon la criticité
+            // ── Couleurs ──────────────────────────────────────────────────────
             int color = alert.severity.color();
             holder.severityBar.setBackgroundColor(color);
             holder.icon.setBackgroundColor(alert.severity.iconBackground());
@@ -149,16 +183,74 @@ public class Screen4Fragment extends Fragment {
             holder.badge.setBackgroundColor(color);
             holder.badge.setText(alert.severity.badge());
 
+            // ── Spinner : affichage du statut actuel ──────────────────────────
+            // On détache le listener avant de changer la sélection
+            // pour éviter un déclenchement intempestif.
+            holder.spinner.setTag(null);
+
+            ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
+                    getContext(),
+                    android.R.layout.simple_spinner_item,
+                    STATUS_OPTIONS
+            );
+            spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            holder.spinner.setAdapter(spinnerAdapter);
+            holder.spinner.setSelection(alert.severity.spinnerIndex(), false);
+
+            // On stocke la position dans le tag pour y accéder dans le listener
+            holder.spinner.setTag(position);
+
+            holder.spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+                @Override
+                public void onItemSelected(AdapterView<?> parent, View view, int spinnerPos, long id) {
+                    // Ignore les callbacks déclenchés lors de l'initialisation
+                    Object tag = holder.spinner.getTag();
+                    if (tag == null) return;
+                    int itemPosition = (int) tag;
+
+                    String selectedStatus = STATUS_OPTIONS.get(spinnerPos);
+                    String currentRaw     = data.get(itemPosition);
+                    Alert  currentAlert   = new Alert(currentRaw);
+
+                    // Ne rien faire si le statut n'a pas changé
+                    if (selectedStatus.equals(currentRaw.split(" - ")[0])) return;
+
+                    // ── Reconstruction de la chaîne avec le nouveau statut ────
+                    String newRaw = Alert.rebuildRaw(
+                            selectedStatus,
+                            currentAlert.title,
+                            currentAlert.subtitle
+                    );
+
+                    // ── Sauvegarde dans EmergencyService ─────────────────────
+                    // EmergencyService doit exposer : updateAlert(int index, String newRaw)
+                    EmergencyService.getInstance().updateAlert(itemPosition, newRaw);
+
+                    // Mise à jour locale de la liste pour refléter la couleur sans rechargement complet
+                    data.set(itemPosition, newRaw);
+                    notifyDataSetChanged();
+
+                    Toast.makeText(
+                            getContext(),
+                            "Statut mis à jour : " + selectedStatus,
+                            Toast.LENGTH_SHORT
+                    ).show();
+                }
+
+                @Override
+                public void onNothingSelected(AdapterView<?> parent) { /* rien */ }
+            });
+
             return convertView;
         }
 
-        /** ViewHolder pattern pour éviter les appels répétés à findViewById. */
-        static class ViewHolder {
+        class ViewHolder {
             final View      severityBar;
             final ImageView icon;
             final TextView  title;
             final TextView  subtitle;
             final TextView  badge;
+            final Spinner   spinner;
 
             ViewHolder(View v) {
                 severityBar = v.findViewById(R.id.alert_severity_bar);
@@ -166,6 +258,7 @@ public class Screen4Fragment extends Fragment {
                 title       = v.findViewById(R.id.alert_title);
                 subtitle    = v.findViewById(R.id.alert_subtitle);
                 badge       = v.findViewById(R.id.alert_severity_badge);
+                spinner     = v.findViewById(R.id.alert_status_spinner);
             }
         }
     }
@@ -187,14 +280,12 @@ public class Screen4Fragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_screen4, container, false);
 
-        ListView         listView    = view.findViewById(R.id.alerts_list_view);
-        LinearLayout     emptyState  = view.findViewById(R.id.empty_state_layout);
-        TextView         countBadge  = view.findViewById(R.id.alerts_count_badge);
+        ListView     listView   = view.findViewById(R.id.alerts_list_view);
+        LinearLayout emptyState = view.findViewById(R.id.empty_state_layout);
+        TextView     countBadge = view.findViewById(R.id.alerts_count_badge);
 
-        // Récupération des alertes depuis le Singleton EmergencyService
         List<String> alerts = EmergencyService.getInstance().getAlerts();
 
-        // État vide
         if (alerts == null || alerts.isEmpty()) {
             listView.setVisibility(View.GONE);
             emptyState.setVisibility(View.VISIBLE);
@@ -202,21 +293,17 @@ public class Screen4Fragment extends Fragment {
             return view;
         }
 
-        // Mise à jour du badge compteur
         countBadge.setText(String.valueOf(alerts.size()));
 
-        // Adaptateur custom
         AlertAdapter adapter = new AlertAdapter(requireContext(), alerts);
         listView.setAdapter(adapter);
 
-        // Tap sur un item → notification + toast
+        // Tap sur un item → toast informatif (le Spinner gère déjà le changement de statut)
         listView.setOnItemClickListener((parent, itemView, position, id) -> {
-            String raw = alerts.get(position);
-            Alert alert = new Alert(raw);
-
+            Alert alert = new Alert(alerts.get(position));
             Toast.makeText(
                     requireContext(),
-                    "Alerte sélectionnée : " + alert.title,
+                    "Alerte : " + alert.title,
                     Toast.LENGTH_SHORT
             ).show();
         });

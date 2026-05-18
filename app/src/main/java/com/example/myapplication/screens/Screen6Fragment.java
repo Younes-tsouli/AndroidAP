@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.screens;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,7 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class Screen7Fragment extends Fragment {
+import com.example.myapplication.Notifiable;
+import com.example.myapplication.R;
+
+public class Screen6Fragment extends Fragment {
     private Notifiable notifiable;
     private final int NUM_FRAGMENT = 1;
 
@@ -25,7 +28,7 @@ public class Screen7Fragment extends Fragment {
     }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_screen7, container, false);    // Inflate the layout for this fragment
+        View view =  inflater.inflate(R.layout.fragment_screen6, container, false);    // Inflate the layout for this fragment
 
         return view;
     }

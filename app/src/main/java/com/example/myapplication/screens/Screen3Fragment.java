@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.screens;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +10,13 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.example.myapplication.issue.AccidentFactory;
+import com.example.myapplication.factories.HighwayFactory;
+import com.example.myapplication.issue.Issue;
+import com.example.myapplication.issue.IssueRepository;
+import com.example.myapplication.Notifiable;
+import com.example.myapplication.R;
+import com.example.myapplication.factories.UrbanFactory;
 import com.google.android.material.button.MaterialButtonToggleGroup;
 import com.google.android.material.textfield.TextInputLayout;
 

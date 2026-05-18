@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.issue;
 
 import android.os.Parcel;
 

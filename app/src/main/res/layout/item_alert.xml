@@ -37,9 +37,9 @@
             android:padding="8dp"
             android:src="@android:drawable/ic_dialog_alert"
             android:background="#FFEBEE"
-            android:tint="#C62828" />
+            app:tint="#C62828" />
 
-        <!-- Texte principal et sous-titre -->
+        <!-- Texte principal, sous-titre et Spinner de statut -->
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -48,7 +48,7 @@
             android:layout_marginStart="12dp"
             android:layout_marginEnd="8dp"
             android:paddingTop="14dp"
-            android:paddingBottom="14dp">
+            android:paddingBottom="10dp">
 
             <TextView
                 android:id="@+id/alert_title"
@@ -73,6 +73,14 @@
                 android:ellipsize="end"
                 android:lineSpacingMultiplier="1.3" />
 
+            <!-- ── Spinner de statut (remplace les étoiles) ── -->
+            <Spinner
+                android:id="@+id/alert_status_spinner"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginTop="8dp"
+                android:spinnerMode="dropdown" />
+
         </LinearLayout>
 
         <!-- Badge de criticité (droite) -->
@@ -80,6 +88,8 @@
             android:id="@+id/alert_severity_badge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="top"
+            android:layout_marginTop="14dp"
             android:layout_marginEnd="14dp"
             android:text="NIV"
             android:textSize="11sp"

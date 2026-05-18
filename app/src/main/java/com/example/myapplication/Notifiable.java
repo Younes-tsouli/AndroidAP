@@ -1,5 +1,7 @@
 package com.example.myapplication;
 
+import com.example.myapplication.issue.Issue;
+
 public interface Notifiable {
     void onClick(int numFragment);
 

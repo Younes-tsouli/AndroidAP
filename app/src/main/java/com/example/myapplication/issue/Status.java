@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.issue;
 
 public enum Status {
     REPORTED(1.0f),

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.menu;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+
+import com.example.myapplication.R;
 
 
 public class MenuFragment extends Fragment {

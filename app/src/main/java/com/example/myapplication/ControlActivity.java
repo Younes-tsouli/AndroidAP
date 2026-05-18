@@ -11,6 +11,17 @@ import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 
+import com.example.myapplication.issue.Issue;
+import com.example.myapplication.menu.MenuFragment;
+import com.example.myapplication.menu.Menuable;
+import com.example.myapplication.screens.Screen1Fragment;
+import com.example.myapplication.screens.Screen2Fragment;
+import com.example.myapplication.screens.Screen3Fragment;
+import com.example.myapplication.screens.Screen4Fragment;
+import com.example.myapplication.screens.Screen5Fragment;
+import com.example.myapplication.screens.Screen6Fragment;
+import com.example.myapplication.screens.Screen7Fragment;
+
 public class ControlActivity extends AppCompatActivity implements Menuable, Notifiable{
 
     private Fragment[] tabFragments = { new Screen1Fragment(), new Screen2Fragment(),

@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.issue;
 
 public interface IssueObserver {
     void onStatusChanged(Issue issue);

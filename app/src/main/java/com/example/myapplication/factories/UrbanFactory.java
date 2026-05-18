@@ -1,4 +1,11 @@
-package com.example.myapplication;
+package com.example.myapplication.factories;
+
+import com.example.myapplication.issue.Priority;
+import com.example.myapplication.issue.Status;
+import com.example.myapplication.issue.UrbanIssue;
+import com.example.myapplication.issue.AccidentFactory;
+import com.example.myapplication.issue.EmergencyService;
+import com.example.myapplication.issue.Issue;
 
 public class UrbanFactory implements AccidentFactory {
     @Override

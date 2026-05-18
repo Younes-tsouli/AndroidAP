@@ -1,6 +1,8 @@
-package com.example.myapplication;
+package com.example.myapplication.issue;
 
 import android.content.Context;
+
+import com.example.myapplication.adapter.IssueAdapter;
 
 import java.util.List;
 

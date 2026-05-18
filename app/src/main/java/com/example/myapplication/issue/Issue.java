@@ -1,7 +1,8 @@
-package com.example.myapplication;
+package com.example.myapplication.issue;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

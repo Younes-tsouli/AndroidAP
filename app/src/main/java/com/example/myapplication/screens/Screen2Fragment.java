@@ -1,4 +1,4 @@
-package com.example.myapplication;
+package com.example.myapplication.screens;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -10,6 +10,14 @@ import android.widget.ListView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.example.myapplication.issue.ClickableIssue;
+import com.example.myapplication.issue.Issue;
+import com.example.myapplication.issue.IssueRepository;
+import com.example.myapplication.Notifiable;
+import com.example.myapplication.R;
+import com.example.myapplication.issue.Status;
+import com.example.myapplication.adapter.IssueAdapter;
 
 import java.util.List;
 
@@ -36,7 +44,7 @@ public class Screen2Fragment extends Fragment implements ClickableIssue<Issue> {
 
         // 2. Configuration de la ListView
         ListView listView = view.findViewById(R.id.my_list_view);
-        adapter = new IssueAdapter(requireContext(), R.layout.item_issue, myIssues, this);
+        adapter = new IssueAdapter(requireContext(), R.layout.item_alert, myIssues, this);
         listView.setAdapter(adapter);
 
         return view;
