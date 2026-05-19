@@ -14,16 +14,20 @@ public abstract class Issue implements Parcelable, IssueObservable {
     private final long timestamp;
     private Priority priority;
     private Status status;
+    private double longitude;
+    private double latitude;
     
     private transient List<IssueObserver> observers = new ArrayList<>();
 
-    public Issue(String title, String description, Priority priority, Status status) {
+    public Issue(String title, String description, Priority priority, Status status, double longitude, double latitude) {
         this.id = UUID.randomUUID().toString();
         this.title = title;
         this.description = description;
         this.timestamp = System.currentTimeMillis();
         this.priority = priority;
         this.status = status;
+        this.latitude = latitude;
+        this.longitude = longitude;
     }
 
     protected Issue(Parcel in) {
@@ -82,6 +86,9 @@ public abstract class Issue implements Parcelable, IssueObservable {
     public String getTitle() { return title; }
     public String getDescription() { return description; }
     public long getTimestamp() { return timestamp; }
+
+    public double getLatitude() { return latitude; }
+    public double getLongitude() { return longitude; }
     
     public Priority getPriority() { return priority; }
     public void setPriority(Priority priority) {

@@ -16,8 +16,8 @@ public class HighwayIssue extends Issue {
         }
     };
 
-    public HighwayIssue(String title, String description, Priority priority, Status status) {
-        super(title, description, priority, status);
+    public HighwayIssue(String title, String description, Priority priority, Status status, double longitude, double latitude) {
+        super(title, description, priority, status, longitude, latitude );
     }
 
     protected HighwayIssue(Parcel in) {

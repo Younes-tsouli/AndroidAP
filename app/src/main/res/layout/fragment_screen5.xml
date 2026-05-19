@@ -1,33 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/dark_blue">
+    <!-- Titre -->
+    <TextView
+        android:id="@+id/title_map"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Incidents à proximité"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:padding="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:src="@drawable/car"
-            android:scaleType="centerCrop"
-            android:alpha="0.9"/>
+    <!-- MapView OSM (Partie supérieure) -->
+    <org.osmdroid.views.MapView
+        android:id="@+id/map"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/title_map"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/divider_line"
+        app:layout_constraintHeight_percent="0.5" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Fragment 2"
-            android:textStyle="bold"
-            android:textSize="24sp"
-            android:textColor="@color/white"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+    <!-- Ligne de séparation -->
+    <View
+        android:id="@+id/divider_line"
+        android:layout_width="0dp"
+        android:layout_height="2dp"
+        android:background="@android:color/darker_gray"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/map" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    <!-- Titre Liste -->
+    <TextView
+        android:id="@+id/title_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Incidents visibles"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="@android:color/black"
+        android:padding="10dp"
+        app:layout_constraintTop_toBottomOf="@+id/divider_line"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <!-- PAS de FrameLayout menu ici ! -->
+    <!-- ListView des incidents (Partie inférieure) -->
+    <ListView
+        android:id="@+id/incidents_list"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        app:layout_constraintTop_toBottomOf="@+id/title_list"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent" />
 
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

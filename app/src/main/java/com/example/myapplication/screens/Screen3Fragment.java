@@ -23,6 +23,9 @@ import com.google.android.material.textfield.TextInputLayout;
 public class Screen3Fragment extends Fragment {
     private Notifiable notifiable;
     private AccidentFactory accidentFactory;
+    private static final double DEFAULT_LATITUDE = 43.6156;
+    private static final double DEFAULT_LONGITUDE = 7.0718;
+    private static final int DEFAULT_ZOOM = 17;
 
     @Override
     public void onAttach(Context context) {
@@ -35,6 +38,13 @@ public class Screen3Fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_screen3, container, false);
+
+        // Génère un petit décalage aléatoire (entre -50 et +50 mètres environ)
+        double randomOffsetLat = (Math.random() - 0.5) * 0.002;
+        double randomOffsetLng = (Math.random() - 0.5) * 0.002;
+
+        double nouvelleLatitude = DEFAULT_LATITUDE + randomOffsetLat;
+        double nouvelleLongitude = DEFAULT_LONGITUDE + randomOffsetLng;
 
         MaterialButtonToggleGroup toggleGroup = view.findViewById(R.id.toggleGroup);
         TextInputLayout layoutTitle = view.findViewById(R.id.layoutTitre);
@@ -52,7 +62,7 @@ public class Screen3Fragment extends Fragment {
             String description = layoutDesc.getEditText().getText().toString();
 
             // 1. Création via la Factory (qui attache l'EmergencyService)
-            Issue issue = accidentFactory.createIssue(titre, description);
+            Issue issue = accidentFactory.createIssue(titre, description,   nouvelleLongitude, nouvelleLatitude);
             
             // 2. Sauvegarde dans le dépôt central (Singleton)
             IssueRepository.getInstance().addIssue(issue);

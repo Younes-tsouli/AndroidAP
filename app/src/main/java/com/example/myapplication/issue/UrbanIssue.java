@@ -16,8 +16,8 @@ public class UrbanIssue extends Issue {
         }
     };
 
-    public UrbanIssue(String title, String description, Priority priority, Status status) {
-        super(title, description, priority, status);
+    public UrbanIssue(String title, String description, Priority priority, Status status, double longitude, double latitude) {
+        super(title, description, priority, status,  longitude,  latitude);
     }
 
     protected UrbanIssue(Parcel in) {
