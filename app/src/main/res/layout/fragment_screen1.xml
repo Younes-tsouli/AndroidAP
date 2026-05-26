@@ -76,7 +76,7 @@
             android:layout_marginStart="4dp"
             android:layout_marginBottom="8dp" />
 
-        <!-- ── Carte statut avec RatingBar ── -->
+        <!-- ── Carte statut avec boutons explicites ── -->
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,20 +95,55 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Modifier le niveau d'intervention"
+                    android:text="Modifier le statut de l'intervention"
                     android:textSize="14sp"
                     android:textColor="#757575" />
 
-                <RatingBar
-                    android:id="@+id/detail_rating_status"
-                    style="@style/Widget.AppCompat.RatingBar"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.button.MaterialButtonToggleGroup
+                    android:id="@+id/detail_status_group"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:numStars="5"
-                    android:stepSize="1.0"
-                    android:progressTint="#C62828"
-                    android:secondaryProgressTint="#FFCDD2"
-                    android:layout_marginTop="14dp" />
+                    android:layout_marginTop="14dp"
+                    app:selectionRequired="true"
+                    app:singleSelection="true">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/status_received"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:text="Recu"
+                        android:textAllCaps="false"
+                        android:textColor="#C62828"
+                        android:textSize="12sp"
+                        app:strokeColor="#C62828" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/status_aid_sent"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:text="Secours envoyes"
+                        android:textAllCaps="false"
+                        android:textColor="#C62828"
+                        android:textSize="11sp"
+                        app:strokeColor="#C62828" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/status_resolved"
+                        style="?attr/materialButtonOutlinedStyle"
+                        android:layout_width="0dp"
+                        android:layout_height="56dp"
+                        android:layout_weight="1"
+                        android:text="Resolu"
+                        android:textAllCaps="false"
+                        android:textColor="#C62828"
+                        android:textSize="12sp"
+                        app:strokeColor="#C62828" />
+
+                </com.google.android.material.button.MaterialButtonToggleGroup>
 
                 <TextView
                     android:id="@+id/detail_status_label"

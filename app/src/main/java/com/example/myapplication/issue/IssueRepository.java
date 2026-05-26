@@ -17,10 +17,22 @@ public class IssueRepository {
     }
 
     public void addIssue(Issue issue) {
+        if (issue == null || findIssueById(issue.getId()) != null) return;
+        issue.addObserver(EmergencyService.getInstance());
         issues.add(issue);
+        EmergencyService.getInstance().onStatusChanged(issue);
     }
 
     public List<Issue> getIssues() {
         return new ArrayList<>(issues); // Retourne une copie pour la sécurité
+    }
+    public Issue findIssueById(String id) {
+        if (id == null) return null;
+        for (Issue issue : issues) {
+            if (id.equals(issue.getId())) {
+                return issue;
+            }
+        }
+        return null;
     }
 }

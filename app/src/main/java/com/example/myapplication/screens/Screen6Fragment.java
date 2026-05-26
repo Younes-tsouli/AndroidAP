@@ -14,7 +14,7 @@ import com.example.myapplication.R;
 
 public class Screen6Fragment extends Fragment {
     private Notifiable notifiable;
-    private final int NUM_FRAGMENT = 1;
+    private final int NUM_FRAGMENT = 5;
 
     @Override
     public void onAttach(Context context) {
@@ -31,6 +31,14 @@ public class Screen6Fragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_screen6, container, false);    // Inflate the layout for this fragment
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (notifiable != null) {
+            notifiable.onFragmentDisplayed(NUM_FRAGMENT);
+        }
     }
 
 }

@@ -127,7 +127,8 @@ public class Screen4Fragment extends Fragment {
          * Format : "NIV.X - LABEL - Titre - Sous-titre"
          */
         static String rebuildRaw(String newStatus, String title, String subtitle) {
-            StringBuilder sb = new StringBuilder(newStatus).append(" - ").append(title);
+            String statusPrefix = newStatus.split(" - ")[0];
+            StringBuilder sb = new StringBuilder(statusPrefix).append(" - ").append(title);
             if (subtitle != null && !subtitle.isEmpty()) {
                 sb.append(" - ").append(subtitle);
             }
@@ -213,7 +214,7 @@ public class Screen4Fragment extends Fragment {
                     Alert  currentAlert   = new Alert(currentRaw);
 
                     // Ne rien faire si le statut n'a pas changé
-                    if (selectedStatus.equals(currentRaw.split(" - ")[0])) return;
+                    if (currentAlert.severity.spinnerIndex() == spinnerPos) return;
 
                     // ── Reconstruction de la chaîne avec le nouveau statut ────
                     String newRaw = Alert.rebuildRaw(

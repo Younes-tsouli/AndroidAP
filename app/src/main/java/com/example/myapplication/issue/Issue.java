@@ -37,7 +37,10 @@ public abstract class Issue implements Parcelable, IssueObservable {
         timestamp = in.readLong();
         priority = Priority.valueOf(in.readString());
         status = Status.valueOf(in.readString());
+        longitude = in.readDouble();
+        latitude = in.readDouble();
         observers = new ArrayList<>();
+        addObserver(EmergencyService.getInstance());
     }
 
     @Override
@@ -48,6 +51,8 @@ public abstract class Issue implements Parcelable, IssueObservable {
         dest.writeLong(timestamp);
         dest.writeString(priority.name());
         dest.writeString(status.name());
+        dest.writeDouble(longitude);
+        dest.writeDouble(latitude);
     }
 
     @Override
@@ -73,9 +78,21 @@ public abstract class Issue implements Parcelable, IssueObservable {
 
     @Override
     public void notifyObservers() {
+        notifyStatusObservers();
+        notifyPriorityObservers();
+    }
+
+    private void notifyStatusObservers() {
         if (observers != null) {
             for (IssueObserver observer : observers) {
                 observer.onStatusChanged(this);
+            }
+        }
+    }
+
+    private void notifyPriorityObservers() {
+        if (observers != null) {
+            for (IssueObserver observer : observers) {
                 observer.onPriorityChanged(this);
             }
         }
@@ -92,14 +109,16 @@ public abstract class Issue implements Parcelable, IssueObservable {
     
     public Priority getPriority() { return priority; }
     public void setPriority(Priority priority) {
+        if (this.priority == priority) return;
         this.priority = priority;
-        notifyObservers();
+        notifyPriorityObservers();
     }
 
     public Status getStatus() { return status; }
     public void setStatus(Status status) {
+        if (this.status == status) return;
         this.status = status;
-        notifyObservers();
+        notifyStatusObservers();
     }
     
     // Méthode utilitaire pour l'UI

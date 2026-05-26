@@ -10,7 +10,7 @@ import com.example.myapplication.issue.Issue;
 public class HighwayFactory implements AccidentFactory {
     @Override
     public Issue createIssue(String title, String description, double longitude, double latitude) {
-        HighwayIssue issue = new HighwayIssue(title, description, Priority.CRITICAL, Status.REPORTED,  longitude,  latitude);
+        HighwayIssue issue = new HighwayIssue(title, description, Priority.CRITICAL, Status.RECEIVED,  longitude,  latitude);
         
         // On attache automatiquement le service d'urgence
         issue.addObserver(EmergencyService.getInstance());

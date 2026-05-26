@@ -5,17 +5,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import com.example.myapplication.issue.EmergencyService;
-import com.example.myapplication.issue.Issue;
 import com.example.myapplication.R;
+import com.example.myapplication.issue.Issue;
+import com.example.myapplication.issue.IssueRepository;
 import com.example.myapplication.issue.Status;
+import com.google.android.material.button.MaterialButtonToggleGroup;
 
 public class Screen1Fragment extends Fragment {
 
@@ -30,46 +30,71 @@ public class Screen1Fragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        // 1. Récupération de l'incident via le Bundle
         Bundle args = getArguments();
         if (args != null) {
-            currentIssue = args.getParcelable("my_incident");
+            Issue bundledIssue = args.getParcelable("my_incident");
+            if (bundledIssue != null) {
+                Issue repositoryIssue = IssueRepository.getInstance().findIssueById(bundledIssue.getId());
+                currentIssue = repositoryIssue != null ? repositoryIssue : bundledIssue;
+            }
         }
 
         if (currentIssue == null) return;
 
-        // 2. Liaison avec les vues
         ImageView iconView = view.findViewById(R.id.detail_priority_icon);
         TextView titleView = view.findViewById(R.id.detail_title);
         TextView descView = view.findViewById(R.id.detail_description);
-        RatingBar ratingBar = view.findViewById(R.id.detail_rating_status);
+        MaterialButtonToggleGroup statusGroup = view.findViewById(R.id.detail_status_group);
         TextView statusLabel = view.findViewById(R.id.detail_status_label);
         TextView safetyView = view.findViewById(R.id.detail_safety_protocol);
 
-        // 3. Affichage des données
         iconView.setImageResource(currentIssue.getPriorityIcon());
         titleView.setText(currentIssue.getTitle());
         descView.setText(currentIssue.getDescription());
-        ratingBar.setRating(currentIssue.getStatus().getRating());
-        statusLabel.setText("Statut : " + currentIssue.getStatus().name());
-        safetyView.setText("Protocole de sécurité :\n" + currentIssue.getSafetyProtocol());
+        statusGroup.check(getButtonIdForStatus(currentIssue.getStatus()));
+        statusLabel.setText("Statut : " + getStatusLabel(currentIssue.getStatus()));
+        safetyView.setText("Protocole de securite :\n" + currentIssue.getSafetyProtocol());
 
-        // 4. Gestion du changement de statut
-        ratingBar.setOnRatingBarChangeListener((bar, rating, fromUser) -> {
-            if (fromUser) {
-                Status newStatus = Status.fromRating(rating);
-                
-                // On met à jour l'objet local
-                currentIssue.setStatus(newStatus);
-                statusLabel.setText("Statut : " + newStatus.name());
+        statusGroup.addOnButtonCheckedListener((group, checkedId, isChecked) -> {
+            if (!isChecked) return;
 
-                // IMPORTANT : Puisque l'objet a été "parcelé", il a perdu ses observateurs.
-                // On notifie manuellement le service d'urgence pour cette action.
-                EmergencyService.getInstance().onStatusChanged(currentIssue);
-                
-                // Optionnel : On pourrait aussi mettre à jour le Repository si on voulait
-                // que le changement persiste dans la liste au retour.
-            }
+            Status newStatus = getStatusForButtonId(checkedId);
+            currentIssue.setStatus(newStatus);
+            statusLabel.setText("Statut : " + getStatusLabel(newStatus));
         });
+    }
+
+    private int getButtonIdForStatus(Status status) {
+        switch (status) {
+            case AID_SENT:
+                return R.id.status_aid_sent;
+            case RESOLVED:
+                return R.id.status_resolved;
+            case RECEIVED:
+            default:
+                return R.id.status_received;
+        }
+    }
+
+    private Status getStatusForButtonId(int buttonId) {
+        if (buttonId == R.id.status_aid_sent) {
+            return Status.AID_SENT;
+        }
+        if (buttonId == R.id.status_resolved) {
+            return Status.RESOLVED;
+        }
+        return Status.RECEIVED;
+    }
+
+    private String getStatusLabel(Status status) {
+        switch (status) {
+            case AID_SENT:
+                return "Secours envoyes";
+            case RESOLVED:
+                return "Resolu";
+            case RECEIVED:
+            default:
+                return "Recu";
+        }
     }
 }
