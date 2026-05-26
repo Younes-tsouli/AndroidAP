@@ -11,7 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.example.myapplication.ControlActivity;
 import com.example.myapplication.R;
 
 public class MenuFragment extends Fragment {
@@ -19,6 +21,8 @@ public class MenuFragment extends Fragment {
     private Menuable menuable;
     private int currentActivatedIndex = 0;
     private static final String ARG_INDEX = "index";
+    private static final String ARG_ROLE = "role";
+    private String role = ControlActivity.ROLE_VICTIM;
 
     private LinearLayout[] tabs = new LinearLayout[7];
     private ImageView[] icons = new ImageView[7];
@@ -56,17 +60,22 @@ public class MenuFragment extends Fragment {
         icons[5] = view.findViewById(R.id.menu_component_5);
         icons[6] = view.findViewById(R.id.menu_component_6);
 
-        // Lire l'index initial
         if (getArguments() != null) {
             currentActivatedIndex = getArguments().getInt(ARG_INDEX, 0);
+            role = getArguments().getString(ARG_ROLE, ControlActivity.ROLE_VICTIM);
+        }
+
+        configureMenuForRole();
+        if (!isVisibleIndex(currentActivatedIndex)) {
+            currentActivatedIndex = ControlActivity.ROLE_RESCUE.equals(role) ? 1 : 0;
         }
 
         rafraichirMenu();
 
-        // Clic sur chaque tab
         for (int i = 0; i < tabs.length; i++) {
             final int index = i;
             tabs[i].setOnClickListener(v -> {
+                if (!isVisibleIndex(index)) return;
                 currentActivatedIndex = index;
                 rafraichirMenu();
                 menuable.onMenuChange(currentActivatedIndex);
@@ -86,16 +95,58 @@ public class MenuFragment extends Fragment {
             // Tint icône : blanc si actif, gris sinon
             icons[i].setColorFilter(actif ? 0xFFFFFFFF : 0xFF888888);
 
-            // Couleur du label TextView (index 1 dans le LinearLayout)
-            ((android.widget.TextView) tabs[i].getChildAt(1))
-                    .setTextColor(actif ? 0xFFFFFFFF : 0xFF888888);
+            ((TextView) tabs[i].getChildAt(1)).setTextColor(actif ? 0xFFFFFFFF : 0xFF888888);
         }
     }
 
     public void setExternalIndex(int i) {
+        if (!isVisibleIndex(i)) return;
         currentActivatedIndex = i;
         if (getView() != null) {
             rafraichirMenu();
         }
+    }
+
+    private void configureMenuForRole() {
+        if (ControlActivity.ROLE_RESCUE.equals(role)) {
+            setTabVisible(0, false);
+            setTabVisible(1, true);
+            setTabVisible(2, false);
+            setTabVisible(3, true);
+            setTabVisible(4, true);
+            setTabVisible(5, false);
+            setTabVisible(6, true);
+
+            setTabLabel(1, "BILAN");
+            setTabLabel(3, "CARTE");
+            setTabLabel(4, "ALERTES");
+            setTabLabel(6, "REGL.");
+            return;
+        }
+
+        setTabVisible(0, true);
+        setTabVisible(1, true);
+        setTabVisible(2, true);
+        setTabVisible(3, true);
+        setTabVisible(4, false);
+        setTabVisible(5, false);
+        setTabVisible(6, false);
+
+        setTabLabel(0, "ACCUEIL");
+        setTabLabel(1, "SUIVI");
+        setTabLabel(2, "SIGNAL");
+        setTabLabel(3, "CARTE");
+    }
+
+    private void setTabVisible(int index, boolean visible) {
+        tabs[index].setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    private void setTabLabel(int index, String label) {
+        ((TextView) tabs[index].getChildAt(1)).setText(label);
+    }
+
+    private boolean isVisibleIndex(int index) {
+        return index >= 0 && index < tabs.length && tabs[index].getVisibility() == View.VISIBLE;
     }
 }

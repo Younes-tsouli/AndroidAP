@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -44,8 +45,15 @@ public class Screen2Fragment extends Fragment implements ClickableIssue<Issue> {
 
         // 2. Configuration de la ListView
         ListView listView = view.findViewById(R.id.my_list_view);
+        TextView countBadge = view.findViewById(R.id.incidents_count_badge);
+        TextView emptyMessage = view.findViewById(R.id.empty_incidents_message);
+        countBadge.setText(String.valueOf(myIssues.size()));
+
         adapter = new IssueAdapter(requireContext(), R.layout.item_alert, myIssues, this);
         listView.setAdapter(adapter);
+        boolean hasIssues = !myIssues.isEmpty();
+        listView.setVisibility(hasIssues ? View.VISIBLE : View.GONE);
+        emptyMessage.setVisibility(hasIssues ? View.GONE : View.VISIBLE);
 
         return view;
     }

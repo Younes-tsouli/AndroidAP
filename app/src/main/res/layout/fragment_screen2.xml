@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="EMERGENCY"
+            android:text="BILAN"
             android:textColor="#C62828"
             android:textSize="20sp"
             android:textStyle="bold"
@@ -59,26 +59,39 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Incidents Actifs"
+            android:text="Incidents actifs"
             android:textSize="17sp"
             android:textStyle="bold"
             android:textColor="#212121" />
 
-        <!-- Badge rouge compteur -->
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TOTAL"
-            android:textColor="#C62828"
-            android:textSize="11sp"
+            android:id="@+id/incidents_count_badge"
+            android:layout_width="40dp"
+            android:layout_height="32dp"
+            android:background="#C62828"
+            android:gravity="center"
+            android:text="0"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp"
             android:textStyle="bold"
-            android:letterSpacing="0.08"
             android:layout_marginEnd="8dp" />
 
     </LinearLayout>
 
     <!-- ── ListView des incidents ── -->
     <!-- Les items sont peuplés par l'adaptateur Java/Kotlin existant -->
+    <TextView
+        android:id="@+id/empty_incidents_message"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:padding="24dp"
+        android:text="Aucun incident actif"
+        android:textColor="#616161"
+        android:textSize="18sp"
+        android:visibility="gone" />
+
     <ListView
         android:id="@+id/my_list_view"
         android:layout_width="match_parent"
