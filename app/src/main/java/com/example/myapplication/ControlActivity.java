@@ -22,8 +22,6 @@ import com.example.myapplication.screens.Screen2Fragment;
 import com.example.myapplication.screens.Screen3Fragment;
 import com.example.myapplication.screens.Screen4Fragment;
 import com.example.myapplication.screens.Screen5Fragment;
-import com.example.myapplication.screens.Screen6Fragment;
-import com.example.myapplication.screens.Screen7Fragment;
 import com.example.myapplication.screens.VictimHomeFragment;
 
 public class ControlActivity extends AppCompatActivity implements Menuable, Notifiable {
@@ -137,16 +135,16 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
         MenuFragment menuFragment = (MenuFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.fragment_menu);
         if (menuFragment != null) {
-            menuFragment.setExternalIndex(1);
+            menuFragment.setExternalIndex(ROLE_VICTIM.equals(currentRole) ? 2 : 1);
         }
     }
 
     private int sanitizeIndex(int index) {
         if (index < 0 || index >= tabFragments.length) return 0;
-        if (ROLE_RESCUE.equals(currentRole) && (index == 0 || index == 2 || index == 5)) {
+        if (ROLE_RESCUE.equals(currentRole) && (index == 0 || index == 2)) {
             return getDefaultIndexForRole(currentRole);
         }
-        if (ROLE_VICTIM.equals(currentRole) && (index == 4 || index == 5 || index == 6)) {
+        if (ROLE_VICTIM.equals(currentRole) && index == 4) {
             return getDefaultIndexForRole(currentRole);
         }
         return index;
@@ -181,20 +179,15 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
                     new Screen2Fragment(),
                     new Screen3Fragment(),
                     new Screen5Fragment(),
-                    new Screen4Fragment(),
-                    new Screen6Fragment(),
-                    new Screen7Fragment()
+                    new Screen4Fragment()
             };
         }
 
         return new Fragment[]{
                 new VictimHomeFragment(),
-                new Screen2Fragment(),
                 new Screen3Fragment(),
-                new Screen5Fragment(),
-                new Screen4Fragment(),
-                new Screen6Fragment(),
-                new Screen7Fragment()
+                new Screen2Fragment(),
+                new Screen5Fragment()
         };
     }
 
@@ -204,6 +197,6 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
 
     private void updateHeaderTitle() {
         TextView title = findViewById(R.id.control_title);
-        title.setText(ROLE_RESCUE.equals(currentRole) ? "MODE SECOURS" : "MODE VICTIME");
+        title.setText(ROLE_RESCUE.equals(currentRole) ? "MODE SECOURS" : "MODE UTILISATEUR");
     }
 }

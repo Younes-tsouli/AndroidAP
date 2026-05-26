@@ -40,13 +40,13 @@
                     android:id="@+id/menu_component_0"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/menu0"
+                    android:src="@drawable/ic_header_home"
                     app:tint="#FFFFFF" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SUIVI"
+                    android:text="ACCUEIL"
                     android:textColor="#FFFFFF"
                     android:textSize="8sp"
                     android:textStyle="bold"
@@ -67,13 +67,13 @@
                     android:id="@+id/menu_component_1"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/menu1"
+                    android:src="@drawable/ic_menu_alert"
                     app:tint="#888888" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="BILAN"
+                    android:text="SIGNAL"
                     android:textColor="#888888"
                     android:textSize="8sp"
                     android:textStyle="bold"
@@ -94,13 +94,13 @@
                     android:id="@+id/menu_component_2"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/menu2"
+                    android:src="@drawable/ic_menu_clipboard"
                     app:tint="#888888" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SIGNAL"
+                    android:text="SUIVI"
                     android:textColor="#888888"
                     android:textSize="8sp"
                     android:textStyle="bold"
@@ -121,7 +121,7 @@
                     android:id="@+id/menu_component_3"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/menu3"
+                    android:src="@drawable/ic_menu_location"
                     app:tint="#888888" />
 
                 <TextView
@@ -148,67 +148,13 @@
                     android:id="@+id/menu_component_4"
                     android:layout_width="22dp"
                     android:layout_height="22dp"
-                    android:src="@drawable/menu4"
+                    android:src="@drawable/ic_menu_alert"
                     app:tint="#888888" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ALERTE"
-                    android:textColor="#888888"
-                    android:textSize="8sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.1" />
-            </LinearLayout>
-
-            <!-- Tab 5 -->
-            <LinearLayout
-                android:id="@+id/cmp5"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="6dp">
-
-                <ImageView
-                    android:id="@+id/menu_component_5"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@drawable/menu5"
-                    app:tint="#888888" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="SUPPR"
-                    android:textColor="#888888"
-                    android:textSize="8sp"
-                    android:textStyle="bold"
-                    android:letterSpacing="0.1" />
-            </LinearLayout>
-
-            <!-- Tab 6 -->
-            <LinearLayout
-                android:id="@+id/cmp6"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:gravity="center"
-                android:padding="6dp">
-
-                <ImageView
-                    android:id="@+id/menu_component_6"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:src="@drawable/menu6"
-                    app:tint="#888888" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="REGL."
+                    android:text="ALERTES"
                     android:textColor="#888888"
                     android:textSize="8sp"
                     android:textStyle="bold"

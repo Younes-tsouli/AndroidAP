@@ -1,7 +1,11 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="Base.Theme.MyApplication" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your dark theme here. -->
-        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+        <item name="colorPrimary">@color/emergency_red</item>
+        <item name="colorPrimaryDark">@color/emergency_red_dark</item>
+        <item name="colorSecondary">@color/emergency_red</item>
+        <item name="colorAccent">@color/emergency_red</item>
+        <item name="android:statusBarColor">@color/emergency_red_dark</item>
+        <item name="android:navigationBarColor">@color/black</item>
     </style>
 </resources>

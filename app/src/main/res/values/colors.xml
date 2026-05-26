@@ -7,6 +7,9 @@
     <color name="blue">#B9F3FA</color>
 
     <color name="red">#971F0A</color>
+    <color name="emergency_red">#B71C1C</color>
+    <color name="emergency_red_dark">#8E0000</color>
+    <color name="emergency_red_light">#FFCDD2</color>
     <color name="orange">#E69E17</color>
     <color name="lime">#E1EB19</color>
     <color name="green">#0EC822</color>

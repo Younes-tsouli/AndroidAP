@@ -25,7 +25,7 @@
         <ImageView
             android:layout_width="92dp"
             android:layout_height="92dp"
-            android:src="@drawable/ic_role_victim"
+            android:src="@drawable/ic_home_user"
             app:tint="#FFFFFF" />
 
         <TextView
@@ -34,7 +34,7 @@
             android:layout_marginTop="20dp"
             android:fontFamily="sans-serif-condensed"
             android:letterSpacing="0.08"
-            android:text="VICTIME / TEMOIN"
+            android:text="UTILISATEUR"
             android:textColor="#FFFFFF"
             android:textSize="27sp"
             android:textStyle="bold" />
@@ -66,7 +66,7 @@
         <ImageView
             android:layout_width="92dp"
             android:layout_height="92dp"
-            android:src="@drawable/ic_role_rescue" />
+            android:src="@drawable/ic_home_rescue" />
 
         <TextView
             android:layout_width="wrap_content"

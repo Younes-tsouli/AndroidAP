@@ -40,8 +40,8 @@ public class VictimHomeFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        view.findViewById(R.id.victim_sos_button).setOnClickListener(click -> openMenuIndex(2));
-        view.findViewById(R.id.victim_bilan_button).setOnClickListener(click -> openMenuIndex(1));
+        view.findViewById(R.id.victim_sos_button).setOnClickListener(click -> openMenuIndex(1));
+        view.findViewById(R.id.victim_bilan_button).setOnClickListener(click -> openMenuIndex(2));
     }
 
     private void openMenuIndex(int index) {

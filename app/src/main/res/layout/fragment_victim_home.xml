@@ -28,7 +28,7 @@
             android:layout_weight="1"
             android:fontFamily="sans-serif-condensed"
             android:letterSpacing="0.10"
-            android:text="ESPACE VICTIME"
+            android:text="ESPACE UTILISATEUR"
             android:textColor="#B71C1C"
             android:textSize="22sp"
             android:textStyle="bold" />
@@ -36,7 +36,7 @@
         <ImageView
             android:layout_width="32dp"
             android:layout_height="32dp"
-            android:src="@drawable/ic_role_victim"
+            android:src="@drawable/ic_home_user"
             app:tint="#B71C1C" />
     </LinearLayout>
 

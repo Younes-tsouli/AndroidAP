@@ -3,7 +3,6 @@ package com.example.myapplication.menu;
 import android.content.Context;
 import android.os.Bundle;
 
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -24,8 +23,8 @@ public class MenuFragment extends Fragment {
     private static final String ARG_ROLE = "role";
     private String role = ControlActivity.ROLE_VICTIM;
 
-    private LinearLayout[] tabs = new LinearLayout[7];
-    private ImageView[] icons = new ImageView[7];
+    private LinearLayout[] tabs = new LinearLayout[5];
+    private ImageView[] icons = new ImageView[5];
 
     public MenuFragment() {}
 
@@ -49,16 +48,11 @@ public class MenuFragment extends Fragment {
         tabs[2] = view.findViewById(R.id.cmp2);
         tabs[3] = view.findViewById(R.id.cmp3);
         tabs[4] = view.findViewById(R.id.cmp4);
-        tabs[5] = view.findViewById(R.id.cmp5);
-        tabs[6] = view.findViewById(R.id.cmp6);
-
         icons[0] = view.findViewById(R.id.menu_component_0);
         icons[1] = view.findViewById(R.id.menu_component_1);
         icons[2] = view.findViewById(R.id.menu_component_2);
         icons[3] = view.findViewById(R.id.menu_component_3);
         icons[4] = view.findViewById(R.id.menu_component_4);
-        icons[5] = view.findViewById(R.id.menu_component_5);
-        icons[6] = view.findViewById(R.id.menu_component_6);
 
         if (getArguments() != null) {
             currentActivatedIndex = getArguments().getInt(ARG_INDEX, 0);
@@ -108,34 +102,31 @@ public class MenuFragment extends Fragment {
     }
 
     private void configureMenuForRole() {
-        if (ControlActivity.ROLE_RESCUE.equals(role)) {
-            setTabVisible(0, false);
-            setTabVisible(1, true);
-            setTabVisible(2, false);
-            setTabVisible(3, true);
-            setTabVisible(4, true);
-            setTabVisible(5, false);
-            setTabVisible(6, true);
+        hideAllTabs();
 
-            setTabLabel(1, "BILAN");
-            setTabLabel(3, "CARTE");
-            setTabLabel(4, "ALERTES");
-            setTabLabel(6, "REGL.");
+        if (ControlActivity.ROLE_RESCUE.equals(role)) {
+            configureTab(1, "BILAN", R.drawable.ic_menu_clipboard);
+            configureTab(3, "CARTE", R.drawable.ic_menu_location);
+            configureTab(4, "ALERTES", R.drawable.ic_menu_alert);
             return;
         }
 
-        setTabVisible(0, true);
-        setTabVisible(1, true);
-        setTabVisible(2, true);
-        setTabVisible(3, true);
-        setTabVisible(4, false);
-        setTabVisible(5, false);
-        setTabVisible(6, false);
+        configureTab(0, "ACCUEIL", R.drawable.ic_header_home);
+        configureTab(1, "SIGNAL", R.drawable.ic_menu_alert);
+        configureTab(2, "SUIVI", R.drawable.ic_menu_clipboard);
+        configureTab(3, "CARTE", R.drawable.ic_menu_location);
+    }
 
-        setTabLabel(0, "ACCUEIL");
-        setTabLabel(1, "SUIVI");
-        setTabLabel(2, "SIGNAL");
-        setTabLabel(3, "CARTE");
+    private void hideAllTabs() {
+        for (LinearLayout tab : tabs) {
+            tab.setVisibility(View.GONE);
+        }
+    }
+
+    private void configureTab(int index, String label, int iconRes) {
+        setTabVisible(index, true);
+        setTabLabel(index, label);
+        setTabIcon(index, iconRes);
     }
 
     private void setTabVisible(int index, boolean visible) {
@@ -144,6 +135,10 @@ public class MenuFragment extends Fragment {
 
     private void setTabLabel(int index, String label) {
         ((TextView) tabs[index].getChildAt(1)).setText(label);
+    }
+
+    private void setTabIcon(int index, int iconRes) {
+        icons[index].setImageResource(iconRes);
     }
 
     private boolean isVisibleIndex(int index) {
