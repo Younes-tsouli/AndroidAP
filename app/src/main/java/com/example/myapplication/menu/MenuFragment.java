@@ -62,7 +62,7 @@ public class MenuFragment extends Fragment {
 
         configureMenuForRole();
         if (!isVisibleIndex(currentActivatedIndex)) {
-            currentActivatedIndex = ControlActivity.ROLE_RESCUE.equals(role) ? 1 : 0;
+            currentActivatedIndex = 0;
         }
 
         rafraichirMenu();
@@ -108,9 +108,9 @@ public class MenuFragment extends Fragment {
         hideAllTabs();
 
         if (ControlActivity.ROLE_RESCUE.equals(role)) {
+            configureTab(0, R.string.menu_alerts, R.drawable.ic_menu_alert);
             configureTab(1, R.string.title_summary, R.drawable.ic_menu_clipboard);
-            configureTab(3, R.string.menu_map, R.drawable.ic_menu_location);
-            configureTab(4, R.string.menu_alerts, R.drawable.ic_menu_alert);
+            configureTab(2, R.string.menu_map, R.drawable.ic_menu_location);
             return;
         }
 

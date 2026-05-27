@@ -135,6 +135,8 @@ public class IssueAdapter extends ArrayAdapter<Issue> {
 
     private String getStatusLabel(Status status) {
         switch (status) {
+            case AID_NOT_SENT:
+                return getContext().getString(R.string.status_not_sent);
             case AID_SENT:
                 return getContext().getString(R.string.status_sent);
             case RESOLVED:

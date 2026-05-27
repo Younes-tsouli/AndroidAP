@@ -5,18 +5,10 @@ import android.util.Log;
 
 import com.example.myapplication.R;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 public class EmergencyService implements IssueObserver {
     private static final String TAG = "EmergencyService";
     private static EmergencyService instance;
 
-    private final List<String> alerts = new ArrayList<>();
-    private final List<String> alertIssueIds = new ArrayList<>();
-    private final Map<String, Integer> alertIndexesByIssueId = new HashMap<>();
     private Context appContext;
 
     private EmergencyService() {}
@@ -40,7 +32,6 @@ public class EmergencyService implements IssueObserver {
 
         String message = buildAlertMessage(issue);
         Log.d(TAG, message);
-        saveOrUpdateIssueAlert(issue, message);
 
         if (issue.getStatus() == Status.AID_SENT) {
             Log.w(TAG, text(R.string.rescue_deployment_log, issue.getTitle()));
@@ -53,43 +44,6 @@ public class EmergencyService implements IssueObserver {
 
         String message = buildAlertMessage(issue);
         Log.d(TAG, message);
-        saveOrUpdateIssueAlert(issue, message);
-    }
-
-    public List<String> getAlerts() {
-        return new ArrayList<>(alerts);
-    }
-
-    public void updateAlertPriority(int index, String newRaw, Priority priority) {
-        if (index < 0 || index >= alerts.size()) return;
-
-        alerts.set(index, newRaw);
-        String issueId = index < alertIssueIds.size() ? alertIssueIds.get(index) : null;
-        Issue issue = IssueRepository.getInstance().findIssueById(issueId);
-        if (issue != null && priority != null) {
-            issue.setPriority(priority);
-        }
-    }
-
-    private void saveOrUpdateIssueAlert(Issue issue, String message) {
-        Integer existingIndex = alertIndexesByIssueId.get(issue.getId());
-
-        if (existingIndex != null && existingIndex >= 0 && existingIndex < alerts.size()) {
-            alerts.set(existingIndex, message);
-            setIssueIdAt(existingIndex, issue.getId());
-            return;
-        }
-
-        alerts.add(message);
-        alertIssueIds.add(issue.getId());
-        alertIndexesByIssueId.put(issue.getId(), alerts.size() - 1);
-    }
-
-    private void setIssueIdAt(int index, String issueId) {
-        while (alertIssueIds.size() <= index) {
-            alertIssueIds.add(null);
-        }
-        alertIssueIds.set(index, issueId);
     }
 
     private String buildAlertMessage(Issue issue) {
@@ -102,6 +56,8 @@ public class EmergencyService implements IssueObserver {
 
     private String getStatusLabel(Status status) {
         switch (status) {
+            case AID_NOT_SENT:
+                return text(R.string.status_not_sent);
             case AID_SENT:
                 return text(R.string.status_sent);
             case RESOLVED:

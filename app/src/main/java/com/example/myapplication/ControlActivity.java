@@ -14,10 +14,12 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.myapplication.issue.EmergencyService;
 import com.example.myapplication.issue.Issue;
 import com.example.myapplication.issue.IssueRepository;
+import com.example.myapplication.issue.Status;
 import com.example.myapplication.menu.MenuFragment;
 import com.example.myapplication.menu.Menuable;
 import com.example.myapplication.screens.ControlTowerFragment;
@@ -25,6 +27,7 @@ import com.example.myapplication.screens.IncidentDetailFragment;
 import com.example.myapplication.screens.IncidentListFragment;
 import com.example.myapplication.screens.IncidentMapFragment;
 import com.example.myapplication.screens.QuickReportFragment;
+import com.example.myapplication.screens.RescueIncidentDetailFragment;
 import com.example.myapplication.screens.VictimHomeFragment;
 
 public class ControlActivity extends AppCompatActivity implements Menuable, Notifiable {
@@ -32,6 +35,8 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
     private static final String TAG = "ControlActivity";
     public static final String EXTRA_INDEX = "index";
     public static final String EXTRA_ROLE = "role";
+    public static final String EXTRA_ISSUE_ID = "issue_id";
+    public static final String EXTRA_ISSUE = "issue";
     public static final String ROLE_VICTIM = "victim";
     public static final String ROLE_RESCUE = "rescue";
     private static final String ARG_INCIDENT = "my_incident";
@@ -39,10 +44,13 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
     private static final String STATE_INDEX = "state_index";
     private static final String STATE_DETAIL_ISSUE_ID = "state_detail_issue_id";
     private static final String STATE_MAP_CAMERA = "state_map_camera";
+    private static final String STATE_SUMMARY_STATUS = "state_summary_status";
 
     private String currentRole = ROLE_VICTIM;
     private int currentIndex = 0;
     private String detailIssueId;
+    private Issue detailIssueFallback;
+    private Status currentSummaryStatus = Status.AID_NOT_SENT;
     private Bundle restoredMapCameraState;
     private Fragment[] tabFragments;
 
@@ -67,6 +75,7 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
         restoredMapCameraState = savedInstanceState != null
                 ? savedInstanceState.getBundle(STATE_MAP_CAMERA)
                 : null;
+        currentSummaryStatus = readSavedSummaryStatus(savedInstanceState);
 
         tabFragments = createFragmentsForRole(currentRole);
         currentIndex = sanitizeIndex(savedInstanceState != null
@@ -74,6 +83,9 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
                 : intent.getIntExtra(EXTRA_INDEX, getDefaultIndexForRole(currentRole)));
         detailIssueId = savedInstanceState != null
                 ? savedInstanceState.getString(STATE_DETAIL_ISSUE_ID)
+                : intent.getStringExtra(EXTRA_ISSUE_ID);
+        detailIssueFallback = savedInstanceState == null
+                ? intent.getParcelableExtra(EXTRA_ISSUE)
                 : null;
         updateHeaderTitle();
 
@@ -89,6 +101,13 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
                 .replace(R.id.fragment_menu, menuFragment)
                 .replace(R.id.fragment_main, initialFragment)
                 .commit();
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        applyNavigationIntent(intent);
     }
 
     @Override
@@ -115,11 +134,17 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
 
     @Override
     public void onIncidentSelected(Issue incident) {
-        openIssueDetail(incident);
+        openIssueDetail(incident, ROLE_VICTIM.equals(currentRole) ? 2 : 1);
     }
 
     @Override
     public void onDataChange(int numFragment, Object object, int actionCode, Object argsAction) {
+        if (numFragment == 6 && argsAction instanceof Status) {
+            currentSummaryStatus = sanitizeSummaryStatus((Status) argsAction);
+            tabFragments[1] = createRescueSummaryFragment(currentSummaryStatus);
+            return;
+        }
+
         if (numFragment == 2) {
             handleIssueListAction(object, actionCode, argsAction);
             return;
@@ -127,7 +152,25 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
 
         if (numFragment == 3 && object instanceof Issue) {
             showMessage(argsAction);
-            openIssueDetail((Issue) object);
+            openIssueDetail((Issue) object, 2);
+            return;
+        }
+
+        if (numFragment == 4 && object instanceof Issue) {
+            openIssueDetail((Issue) object, 0);
+            return;
+        }
+
+        if (numFragment == 5 && object instanceof Issue) {
+            if (ROLE_RESCUE.equals(currentRole) && argsAction instanceof Status) {
+                if (currentIndex == 0 && hasPendingRescueAlerts()) {
+                    showRescueAlerts();
+                } else {
+                    showRescueSummary((Status) argsAction);
+                }
+            } else {
+                showTab(1);
+            }
         }
     }
 
@@ -141,6 +184,7 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
         outState.putString(STATE_ROLE, currentRole);
         outState.putInt(STATE_INDEX, currentIndex);
         outState.putString(STATE_DETAIL_ISSUE_ID, detailIssueId);
+        outState.putString(STATE_SUMMARY_STATUS, currentSummaryStatus.name());
 
         Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.fragment_main);
         if (currentFragment instanceof IncidentMapFragment) {
@@ -156,18 +200,19 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
 
         Issue issue = (Issue) object;
         if (actionCode == 1) {
-            openIssueDetail(issue);
+            openIssueDetail(issue, ROLE_VICTIM.equals(currentRole) ? 2 : 1);
         } else if (actionCode == 2 && argsAction instanceof Float) {
             Log.d(TAG, "Status change for " + issue.getTitle() + " rating=" + argsAction);
         }
     }
 
-    private void openIssueDetail(Issue issue) {
+    private void openIssueDetail(Issue issue, int menuIndex) {
         if (issue == null) return;
 
-        currentIndex = ROLE_VICTIM.equals(currentRole) ? 2 : 1;
+        currentIndex = sanitizeIndex(menuIndex);
         detailIssueId = issue.getId();
-        IncidentDetailFragment detailFragment = createIssueDetailFragment(issue);
+        detailIssueFallback = issue;
+        Fragment detailFragment = createDetailFragmentForRole(issue);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragment_main, detailFragment)
                 .addToBackStack(null)
@@ -180,14 +225,68 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
         }
     }
 
+    private void showTab(int index) {
+        int safeIndex = sanitizeIndex(index);
+        currentIndex = safeIndex;
+        detailIssueId = null;
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_main, tabFragments[safeIndex])
+                .addToBackStack(null)
+                .commit();
+
+        MenuFragment menuFragment = (MenuFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_menu);
+        if (menuFragment != null) {
+            menuFragment.setExternalIndex(safeIndex);
+        }
+    }
+
+    private void showRescueSummary(Status status) {
+        currentIndex = 1;
+        detailIssueId = null;
+        currentSummaryStatus = sanitizeSummaryStatus(status);
+        Fragment summaryFragment = createRescueSummaryFragment(currentSummaryStatus);
+        tabFragments[1] = summaryFragment;
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_main, summaryFragment)
+                .addToBackStack(null)
+                .commit();
+
+        MenuFragment menuFragment = (MenuFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_menu);
+        if (menuFragment != null) {
+            menuFragment.setExternalIndex(currentIndex);
+        }
+    }
+
+    private void showRescueAlerts() {
+        currentIndex = 0;
+        detailIssueId = null;
+        Fragment alertsFragment = withRole(new ControlTowerFragment(), ROLE_RESCUE);
+        tabFragments[0] = alertsFragment;
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_main, alertsFragment)
+                .addToBackStack(null)
+                .commit();
+
+        MenuFragment menuFragment = (MenuFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.fragment_menu);
+        if (menuFragment != null) {
+            menuFragment.setExternalIndex(currentIndex);
+        }
+    }
+
+    private boolean hasPendingRescueAlerts() {
+        for (Issue issue : IssueRepository.getInstance().getIssues()) {
+            if (issue.getStatus() == Status.RECEIVED) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     private int sanitizeIndex(int index) {
         if (index < 0 || index >= tabFragments.length) return 0;
-        if (ROLE_RESCUE.equals(currentRole) && (index == 0 || index == 2)) {
-            return getDefaultIndexForRole(currentRole);
-        }
-        if (ROLE_VICTIM.equals(currentRole) && index == 4) {
-            return getDefaultIndexForRole(currentRole);
-        }
         return index;
     }
 
@@ -219,9 +318,49 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
         }
 
         Issue issue = IssueRepository.getInstance().findIssueById(detailIssueId);
+        if (issue == null && detailIssueFallback != null
+                && detailIssueId.equals(detailIssueFallback.getId())) {
+            issue = detailIssueFallback;
+        }
         if (issue == null) {
             detailIssueId = null;
+            detailIssueFallback = null;
             return tabFragments[currentIndex];
+        }
+        return createDetailFragmentForRole(issue);
+    }
+
+    private void applyNavigationIntent(Intent intent) {
+        if (intent == null || !intent.hasExtra(EXTRA_ROLE)) return;
+
+        currentRole = ROLE_RESCUE.equals(intent.getStringExtra(EXTRA_ROLE))
+                ? ROLE_RESCUE
+                : ROLE_VICTIM;
+        restoredMapCameraState = null;
+        tabFragments = createFragmentsForRole(currentRole);
+        currentIndex = sanitizeIndex(intent.getIntExtra(EXTRA_INDEX, getDefaultIndexForRole(currentRole)));
+        detailIssueId = intent.getStringExtra(EXTRA_ISSUE_ID);
+        detailIssueFallback = intent.getParcelableExtra(EXTRA_ISSUE);
+        currentSummaryStatus = Status.AID_NOT_SENT;
+        updateHeaderTitle();
+
+        Bundle args = new Bundle();
+        args.putInt(EXTRA_INDEX, currentIndex);
+        args.putString(EXTRA_ROLE, currentRole);
+
+        MenuFragment menuFragment = new MenuFragment();
+        menuFragment.setArguments(args);
+
+        getSupportFragmentManager().popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_menu, menuFragment)
+                .replace(R.id.fragment_main, createInitialMainFragment())
+                .commit();
+    }
+
+    private Fragment createDetailFragmentForRole(Issue issue) {
+        if (ROLE_RESCUE.equals(currentRole)) {
+            return createRescueIssueDetailFragment(issue);
         }
         return createIssueDetailFragment(issue);
     }
@@ -235,14 +374,21 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
         return detailFragment;
     }
 
+    private RescueIncidentDetailFragment createRescueIssueDetailFragment(Issue issue) {
+        RescueIncidentDetailFragment detailFragment = new RescueIncidentDetailFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(ARG_INCIDENT, issue);
+        bundle.putString(EXTRA_ROLE, currentRole);
+        detailFragment.setArguments(bundle);
+        return detailFragment;
+    }
+
     private Fragment[] createFragmentsForRole(String role) {
         if (ROLE_RESCUE.equals(role)) {
             return new Fragment[]{
-                    withRole(new IncidentListFragment(), role),
-                    withRole(new IncidentListFragment(), role),
-                    withRole(new QuickReportFragment(), role),
-                    withRole(new IncidentMapFragment(), role),
-                    withRole(new ControlTowerFragment(), role)
+                    withRole(new ControlTowerFragment(), role),
+                    createRescueSummaryFragment(currentSummaryStatus),
+                    withRole(new IncidentMapFragment(), role)
             };
         }
 
@@ -264,8 +410,39 @@ public class ControlActivity extends AppCompatActivity implements Menuable, Noti
         return fragment;
     }
 
+    private Fragment createRescueSummaryFragment(Status status) {
+        IncidentListFragment fragment = new IncidentListFragment();
+        Bundle args = new Bundle();
+        args.putString(EXTRA_ROLE, ROLE_RESCUE);
+        args.putString(IncidentListFragment.ARG_INITIAL_STATUS, status.name());
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    private Status readSavedSummaryStatus(Bundle savedInstanceState) {
+        if (savedInstanceState == null) return Status.AID_NOT_SENT;
+        return readSummaryStatus(savedInstanceState.getString(STATE_SUMMARY_STATUS));
+    }
+
+    private Status readSummaryStatus(String statusName) {
+        if (statusName == null) return Status.AID_NOT_SENT;
+
+        try {
+            return sanitizeSummaryStatus(Status.valueOf(statusName));
+        } catch (IllegalArgumentException ignored) {
+            return Status.AID_NOT_SENT;
+        }
+    }
+
+    private Status sanitizeSummaryStatus(Status status) {
+        if (status == Status.AID_SENT || status == Status.RESOLVED || status == Status.AID_NOT_SENT) {
+            return status;
+        }
+        return Status.AID_NOT_SENT;
+    }
+
     private int getDefaultIndexForRole(String role) {
-        return ROLE_RESCUE.equals(role) ? 1 : 0;
+        return 0;
     }
 
     private void updateHeaderTitle() {

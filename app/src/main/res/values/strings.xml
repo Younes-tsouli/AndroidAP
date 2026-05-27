@@ -32,6 +32,7 @@
     <string name="intervention_status">STATUT DE L\'INTERVENTION</string>
     <string name="change_status">Modifier le statut de l\'intervention</string>
     <string name="status_received">Reçu</string>
+    <string name="status_not_sent">Secours non envoyés</string>
     <string name="status_sent">Secours envoyés</string>
     <string name="status_resolved">Résolu</string>
     <string name="status_prefix">Statut : %1$s</string>
@@ -53,7 +54,12 @@
     <!-- Bilan / incidents -->
     <string name="title_summary">BILAN</string>
     <string name="active_incidents">Incidents actifs</string>
+    <string name="summary_processed_incidents">Accidents traités</string>
+    <string name="summary_tab_not_sent">NON ENVOYÉS</string>
+    <string name="summary_tab_sent">ENVOYÉS</string>
+    <string name="summary_tab_finished">TERMINÉS</string>
     <string name="no_active_incidents">Aucun incident actif</string>
+    <string name="no_summary_incidents">Aucun accident dans cette catégorie</string>
 
     <!-- Signalement -->
     <string name="quick_report">Signalement rapide</string>
@@ -84,12 +90,10 @@
     <string name="send_alert">ENVOYER L\'ALERTE</string>
 
     <!-- Tour de contrôle -->
-    <string name="control_tower">Tour de contrôle</string>
-    <string name="realtime_alerts">Alertes en temps réel</string>
-    <string name="no_active_alerts">Aucune alerte active</string>
+    <string name="control_tower">Alertes à traiter</string>
+    <string name="realtime_alerts">Nouveaux accidents en attente de décision</string>
+    <string name="no_active_alerts">Aucune nouvelle alerte</string>
     <string name="system_operational">Le système est opérationnel</string>
-    <string name="alert_status_updated">Niveau mis à jour : %1$s</string>
-    <string name="alert_prefix">Alerte : %1$s</string>
     <string name="alert_status_field">Statut : %1$s</string>
     <string name="alert_priority_field">Priorité : %1$s</string>
     <string name="alert_photo_yes_field">Photo : oui</string>
@@ -105,6 +109,20 @@
     <string name="priority_medium">moyenne</string>
     <string name="priority_high">haute</string>
     <string name="priority_critical">critique</string>
+    <string name="rescue_detail_title">DÉTAIL DE L\'ALERTE</string>
+    <string name="rescue_decision_title">Évaluation secours</string>
+    <string name="rescue_distance_unavailable">Distance indisponible</string>
+    <string name="rescue_distance_meters_format">À %1$d m de votre position</string>
+    <string name="rescue_distance_km_format">À %1$.1f km de votre position</string>
+    <string name="rescue_time_now">À l\'instant</string>
+    <string name="rescue_time_minutes_format">Il y a %1$d min</string>
+    <string name="rescue_time_hours_format">Il y a %1$d h</string>
+    <string name="rescue_time_prefix">Alerte : %1$s</string>
+    <string name="rescue_action_send">ENVOYER LES SECOURS</string>
+    <string name="rescue_action_do_not_send">NE PAS ENVOYER</string>
+    <string name="rescue_action_finish">TERMINER L\'INTERVENTION</string>
+    <string name="rescue_action_restore_sent">REMETTRE EN SECOURS ENVOYÉS</string>
+    <string name="rescue_decision_saved">Décision enregistrée</string>
 
     <!-- Carte -->
     <string name="nearby_incidents">Incidents à proximité</string>
@@ -117,6 +135,11 @@
     <string name="map_legend_level_1">STABLE</string>
     <string name="map_legend_level_2">URGENT</string>
     <string name="map_legend_level_3">CRITIQUE</string>
+    <string name="map_filters_title">Afficher sur la carte</string>
+    <string name="map_filter_received">Nouvelles</string>
+    <string name="map_filter_not_sent">Non envoyés</string>
+    <string name="map_filter_sent">Envoyés</string>
+    <string name="map_filter_resolved">Terminés</string>
 
     <!-- Item alerte -->
     <string name="alert_label">Alerte</string>
@@ -129,6 +152,8 @@
     <!-- Descriptions d'accessibilité -->
     <string name="desc_accident_photo">Photo de l\'accident</string>
     <string name="desc_transmitted_photo">Photo transmise aux secours</string>
+    <string name="desc_open_photo_fullscreen">Afficher la photo en plein écran</string>
+    <string name="desc_close_photo_fullscreen">Fermer la photo en plein écran</string>
     <string name="desc_exit">Sortie</string>
     <string name="desc_center_personal_location">Recentrer sur votre position</string>
     <string name="desc_theme_toggle_light">Mode jour activé. Passer en mode nuit</string>
@@ -144,14 +169,9 @@
     <string name="notification_status_update_title">Intervention mise à jour</string>
     <string name="notification_status_update_text">%1$s : %2$s</string>
 
-    <string-array name="alert_status_options">
-        <item>NIV.3 - CRITIQUE</item>
-        <item>NIV.2 - URGENT</item>
-        <item>NIV.1 - STABLE</item>
-    </string-array>
-
     <string-array name="issue_status_options">
         <item>Reçu</item>
+        <item>Secours non envoyés</item>
         <item>Secours envoyés</item>
         <item>Résolu</item>
     </string-array>

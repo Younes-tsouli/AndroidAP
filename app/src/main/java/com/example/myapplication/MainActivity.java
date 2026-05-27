@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
         );
 
         findViewById(R.id.rescue_role_button).setOnClickListener(click ->
-                openControlActivity(ControlActivity.ROLE_RESCUE, 1)
+                openControlActivity(ControlActivity.ROLE_RESCUE, 0)
         );
     }
 

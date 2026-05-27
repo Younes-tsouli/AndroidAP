@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -35,6 +36,7 @@ import com.example.myapplication.R;
 import com.example.myapplication.issue.Issue;
 import com.example.myapplication.issue.IssueRepository;
 import com.example.myapplication.issue.Priority;
+import com.example.myapplication.issue.Status;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.api.IGeoPoint;
@@ -62,6 +64,10 @@ public class IncidentMapFragment extends Fragment {
     private static final String ARG_MAP_LATITUDE = "map_latitude";
     private static final String ARG_MAP_LONGITUDE = "map_longitude";
     private static final String ARG_MAP_ZOOM = "map_zoom";
+    private static final String STATE_FILTER_RECEIVED = "filter_received";
+    private static final String STATE_FILTER_NOT_SENT = "filter_not_sent";
+    private static final String STATE_FILTER_SENT = "filter_sent";
+    private static final String STATE_FILTER_RESOLVED = "filter_resolved";
     private static final ColorFilter SOFT_NIGHT_TILE_FILTER = new ColorMatrixColorFilter(new float[]{
             -0.55f, 0f, 0f, 0f, 210f,
             0f, -0.55f, 0f, 0f, 210f,
@@ -78,6 +84,10 @@ public class IncidentMapFragment extends Fragment {
     private List<Issue> visibleIncidents;
     private IncidentListAdapter adapter;
     private boolean cameraRestored;
+    private boolean showReceived = true;
+    private boolean showAidNotSent = false;
+    private boolean showAidSent = true;
+    private boolean showResolved = false;
 
     private final ActivityResultLauncher<String[]> locationPermissionLauncher =
             registerForActivityResult(
@@ -130,11 +140,13 @@ public class IncidentMapFragment extends Fragment {
         locationManager = (LocationManager) requireContext().getSystemService(Context.LOCATION_SERVICE);
         ListView listViewIncidents = view.findViewById(R.id.incidents_list);
 
+        restoreStatusFilters(savedInstanceState);
         allIncidents = IssueRepository.getInstance().getIssues();
         visibleIncidents = new ArrayList<>();
         adapter = new IncidentListAdapter(requireContext(), visibleIncidents);
         listViewIncidents.setAdapter(adapter);
 
+        setupStatusFilters(view);
         centerPersonalLocationButton.setOnClickListener(click -> centerOnPersonalPosition());
         updateCenterButtonState();
 
@@ -174,6 +186,49 @@ public class IncidentMapFragment extends Fragment {
         updateVisibleIncidents();
     }
 
+    private void restoreStatusFilters(Bundle savedInstanceState) {
+        if (savedInstanceState == null) return;
+
+        showReceived = savedInstanceState.getBoolean(STATE_FILTER_RECEIVED, showReceived);
+        showAidNotSent = savedInstanceState.getBoolean(STATE_FILTER_NOT_SENT, showAidNotSent);
+        showAidSent = savedInstanceState.getBoolean(STATE_FILTER_SENT, showAidSent);
+        showResolved = savedInstanceState.getBoolean(STATE_FILTER_RESOLVED, showResolved);
+    }
+
+    private void setupStatusFilters(View view) {
+        CheckBox receivedFilter = view.findViewById(R.id.filter_received);
+        CheckBox notSentFilter = view.findViewById(R.id.filter_not_sent);
+        CheckBox sentFilter = view.findViewById(R.id.filter_sent);
+        CheckBox resolvedFilter = view.findViewById(R.id.filter_resolved);
+
+        receivedFilter.setChecked(showReceived);
+        notSentFilter.setChecked(showAidNotSent);
+        sentFilter.setChecked(showAidSent);
+        resolvedFilter.setChecked(showResolved);
+
+        receivedFilter.setOnCheckedChangeListener((buttonView, checked) -> {
+            showReceived = checked;
+            refreshFilteredIncidents();
+        });
+        notSentFilter.setOnCheckedChangeListener((buttonView, checked) -> {
+            showAidNotSent = checked;
+            refreshFilteredIncidents();
+        });
+        sentFilter.setOnCheckedChangeListener((buttonView, checked) -> {
+            showAidSent = checked;
+            refreshFilteredIncidents();
+        });
+        resolvedFilter.setOnCheckedChangeListener((buttonView, checked) -> {
+            showResolved = checked;
+            refreshFilteredIncidents();
+        });
+    }
+
+    private void refreshFilteredIncidents() {
+        addMarkersToMap();
+        updateVisibleIncidents();
+    }
+
     private void configureMapTileSource() {
         map.setTileSource(TileSourceFactory.MAPNIK);
         map.getMapOverlay().setColorFilter(isNightMode() ? SOFT_NIGHT_TILE_FILTER : null);
@@ -196,13 +251,16 @@ public class IncidentMapFragment extends Fragment {
     }
 
     private void centerMap(IMapController controller) {
-        if (allIncidents == null || allIncidents.isEmpty()) {
-            controller.setCenter(new GeoPoint(DEFAULT_LATITUDE, DEFAULT_LONGITUDE));
-            return;
+        if (allIncidents != null) {
+            for (Issue incident : allIncidents) {
+                if (shouldShowIssue(incident)) {
+                    controller.setCenter(new GeoPoint(incident.getLatitude(), incident.getLongitude()));
+                    return;
+                }
+            }
         }
 
-        Issue firstIncident = allIncidents.get(0);
-        controller.setCenter(new GeoPoint(firstIncident.getLatitude(), firstIncident.getLongitude()));
+        controller.setCenter(new GeoPoint(DEFAULT_LATITUDE, DEFAULT_LONGITUDE));
     }
 
     private boolean restoreMapCamera(IMapController controller) {
@@ -243,6 +301,8 @@ public class IncidentMapFragment extends Fragment {
         addPersonalPositionMarker();
 
         for (Issue issue : allIncidents) {
+            if (!shouldShowIssue(issue)) continue;
+
             Marker marker = new Marker(map);
             marker.setPosition(new GeoPoint(issue.getLatitude(), issue.getLongitude()));
             marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
@@ -254,6 +314,17 @@ public class IncidentMapFragment extends Fragment {
         }
 
         map.invalidate();
+    }
+
+    private boolean shouldShowIssue(Issue issue) {
+        if (issue == null) return false;
+
+        Status status = issue.getStatus();
+        if (status == Status.RECEIVED) return showReceived;
+        if (status == Status.AID_NOT_SENT) return showAidNotSent;
+        if (status == Status.AID_SENT) return showAidSent;
+        if (status == Status.RESOLVED) return showResolved;
+        return true;
     }
 
     private void addPersonalPositionMarker() {
@@ -448,12 +519,21 @@ public class IncidentMapFragment extends Fragment {
 
         visibleIncidents.clear();
         for (Issue issue : allIncidents) {
-            if (bounds.contains(issue.getLatitude(), issue.getLongitude())) {
+            if (shouldShowIssue(issue) && bounds.contains(issue.getLatitude(), issue.getLongitude())) {
                 visibleIncidents.add(issue);
             }
         }
 
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean(STATE_FILTER_RECEIVED, showReceived);
+        outState.putBoolean(STATE_FILTER_NOT_SENT, showAidNotSent);
+        outState.putBoolean(STATE_FILTER_SENT, showAidSent);
+        outState.putBoolean(STATE_FILTER_RESOLVED, showResolved);
     }
 
     @Override

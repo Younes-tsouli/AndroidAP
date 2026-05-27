@@ -101,7 +101,8 @@
                         android:layout_height="64dp"
                         android:gravity="top"
                         android:imeOptions="actionDone"
-                        android:inputType="textMultiLine|textCapSentences"
+                        android:inputType="textCapSentences"
+                        android:maxLines="3"
                         android:textColor="@color/app_text_primary"
                         android:textColorHint="@color/app_text_muted" />
 

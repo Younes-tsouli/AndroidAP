@@ -130,6 +130,8 @@ public class IncidentDetailFragment extends Fragment {
 
     private String getStatusLabel(Status status) {
         switch (status) {
+            case AID_NOT_SENT:
+                return getString(R.string.status_not_sent);
             case AID_SENT:
                 return getString(R.string.status_sent);
             case RESOLVED:
@@ -141,30 +143,31 @@ public class IncidentDetailFragment extends Fragment {
     }
 
     private void updateStatusTimeline(View view, Status status) {
-        int currentStep = status.ordinal();
+        boolean sent = status == Status.AID_SENT || status == Status.RESOLVED;
+        boolean resolved = status == Status.RESOLVED;
 
         updateTimelineStep(
                 view.findViewById(R.id.timeline_received_step),
                 view.findViewById(R.id.timeline_received_label),
-                currentStep >= Status.RECEIVED.ordinal()
+                true
         );
         updateTimelineStep(
                 view.findViewById(R.id.timeline_sent_step),
                 view.findViewById(R.id.timeline_sent_label),
-                currentStep >= Status.AID_SENT.ordinal()
+                sent
         );
         updateTimelineStep(
                 view.findViewById(R.id.timeline_resolved_step),
                 view.findViewById(R.id.timeline_resolved_label),
-                currentStep >= Status.RESOLVED.ordinal()
+                resolved
         );
         updateTimelineArrow(
                 view.findViewById(R.id.timeline_arrow_received_sent),
-                currentStep >= Status.AID_SENT.ordinal()
+                sent
         );
         updateTimelineArrow(
                 view.findViewById(R.id.timeline_arrow_sent_resolved),
-                currentStep >= Status.RESOLVED.ordinal()
+                resolved
         );
     }
 

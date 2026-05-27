@@ -58,10 +58,11 @@ public final class NotificationController {
         showNotification(
                 context,
                 CHANNEL_NEW_ACCIDENT,
-                NOTIFICATION_NEW_ACCIDENT,
+                getNotificationId(NOTIFICATION_NEW_ACCIDENT, issue),
                 context.getString(R.string.notification_new_accident_title),
                 context.getString(R.string.notification_new_accident_text, issue.getTitle()),
-                NotificationCompat.PRIORITY_HIGH
+                NotificationCompat.PRIORITY_HIGH,
+                createRescueAlertsPendingIntent(context, issue)
         );
     }
 
@@ -71,14 +72,15 @@ public final class NotificationController {
         showNotification(
                 context,
                 CHANNEL_STATUS_UPDATES,
-                NOTIFICATION_STATUS_UPDATE,
+                getNotificationId(NOTIFICATION_STATUS_UPDATE, issue),
                 context.getString(R.string.notification_status_update_title),
                 context.getString(
                         R.string.notification_status_update_text,
                         issue.getTitle(),
                         getStatusLabel(context, issue.getStatus())
                 ),
-                NotificationCompat.PRIORITY_DEFAULT
+                NotificationCompat.PRIORITY_DEFAULT,
+                createUserIssueDetailPendingIntent(context, issue)
         );
     }
 
@@ -94,18 +96,10 @@ public final class NotificationController {
             int notificationId,
             String title,
             String text,
-            int priority
+            int priority,
+            PendingIntent pendingIntent
     ) {
         createChannels(context);
-
-        Intent intent = new Intent(context, MainActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(
-                context,
-                notificationId,
-                intent,
-                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
-        );
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, channelId)
                 .setSmallIcon(R.drawable.ic_menu_alert)
@@ -123,8 +117,53 @@ public final class NotificationController {
         }
     }
 
+    private static PendingIntent createRescueAlertsPendingIntent(Context context, Issue issue) {
+        Intent intent = new Intent(context, ControlActivity.class);
+        intent.putExtra(ControlActivity.EXTRA_ROLE, ControlActivity.ROLE_RESCUE);
+        intent.putExtra(ControlActivity.EXTRA_INDEX, 0);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        return PendingIntent.getActivity(
+                context,
+                getRequestCode(NOTIFICATION_NEW_ACCIDENT, issue),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+    }
+
+    private static PendingIntent createUserIssueDetailPendingIntent(Context context, Issue issue) {
+        Intent intent = new Intent(context, ControlActivity.class);
+        intent.putExtra(ControlActivity.EXTRA_ROLE, ControlActivity.ROLE_VICTIM);
+        intent.putExtra(ControlActivity.EXTRA_INDEX, 2);
+        intent.putExtra(ControlActivity.EXTRA_ISSUE_ID, issue.getId());
+        intent.putExtra(ControlActivity.EXTRA_ISSUE, issue);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        return PendingIntent.getActivity(
+                context,
+                getRequestCode(NOTIFICATION_STATUS_UPDATE, issue),
+                intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
+        );
+    }
+
+    private static int getNotificationId(int baseId, Issue issue) {
+        return baseId + getIssueHash(issue);
+    }
+
+    private static int getRequestCode(int baseId, Issue issue) {
+        return baseId + getIssueHash(issue);
+    }
+
+    private static int getIssueHash(Issue issue) {
+        if (issue == null || issue.getId() == null) return 0;
+        return Math.abs(issue.getId().hashCode() % 100000);
+    }
+
     private static String getStatusLabel(Context context, Status status) {
         switch (status) {
+            case AID_NOT_SENT:
+                return context.getString(R.string.status_not_sent);
             case AID_SENT:
                 return context.getString(R.string.status_sent);
             case RESOLVED:

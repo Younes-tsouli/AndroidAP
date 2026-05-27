@@ -8,10 +8,13 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.InputType;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -134,7 +137,7 @@ public class QuickReportFragment extends Fragment {
         Button validationButton = view.findViewById(R.id.btnEnvoyer);
         View photoButton = view.findViewById(R.id.btnPhoto);
         ScrollView signalScroll = view.findViewById(R.id.signal_scroll);
-        configureTitleKeyboard(layoutTitle.getEditText(), layoutDesc.getEditText());
+        configureReportKeyboard(layoutTitle.getEditText(), layoutDesc.getEditText());
 
         toggleGroup.check(R.id.btnUrbain);
         requestLocationIfNeeded();
@@ -441,7 +444,7 @@ public class QuickReportFragment extends Fragment {
         return isValid;
     }
 
-    private void configureTitleKeyboard(EditText titleEditText, EditText descriptionEditText) {
+    private void configureReportKeyboard(EditText titleEditText, EditText descriptionEditText) {
         if (titleEditText == null || descriptionEditText == null) return;
 
         titleEditText.setSingleLine(true);
@@ -452,6 +455,32 @@ public class QuickReportFragment extends Fragment {
             }
             return false;
         });
+
+        descriptionEditText.setSingleLine(false);
+        descriptionEditText.setMaxLines(3);
+        descriptionEditText.setRawInputType(
+                InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_CAP_SENTENCES
+        );
+        descriptionEditText.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        descriptionEditText.setOnEditorActionListener((textView, actionId, event) -> {
+            boolean enterPressed = event != null
+                    && event.getKeyCode() == KeyEvent.KEYCODE_ENTER
+                    && event.getAction() == KeyEvent.ACTION_UP;
+            if (actionId == EditorInfo.IME_ACTION_DONE || enterPressed) {
+                hideKeyboard(descriptionEditText);
+                descriptionEditText.clearFocus();
+                return true;
+            }
+            return false;
+        });
+    }
+
+    private void hideKeyboard(View view) {
+        InputMethodManager inputMethodManager =
+                (InputMethodManager) requireContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (inputMethodManager != null) {
+            inputMethodManager.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
     }
 
     private void showMissingTitleFeedback(ScrollView scrollView, TextInputLayout layoutTitle) {

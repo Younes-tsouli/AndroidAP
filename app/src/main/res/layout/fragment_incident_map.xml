@@ -24,9 +24,9 @@
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/bg_map_legend"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:orientation="vertical"
-        android:padding="8dp"
+        android:padding="6dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/map_container">
@@ -39,15 +39,15 @@
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="28dp"
+                android:layout_height="22dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingEnd="6dp">
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:src="@drawable/ic_map_marker"
                     app:tint="@color/map_marker_blue" />
 
@@ -60,19 +60,19 @@
                     android:maxLines="1"
                     android:text="@string/map_legend_my_position"
                     android:textColor="@color/app_text_primary"
-                    android:textSize="11sp" />
+                    android:textSize="10sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="28dp"
+                android:layout_height="22dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:src="@drawable/ic_map_marker"
                     app:tint="@color/map_marker_green" />
 
@@ -85,7 +85,7 @@
                     android:maxLines="1"
                     android:text="@string/map_legend_level_1"
                     android:textColor="@color/app_text_primary"
-                    android:textSize="11sp" />
+                    android:textSize="10sp" />
             </LinearLayout>
 
         </LinearLayout>
@@ -93,21 +93,21 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="2dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="28dp"
+                android:layout_height="22dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:paddingEnd="6dp">
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:src="@drawable/ic_map_marker"
                     app:tint="@color/map_marker_yellow" />
 
@@ -120,19 +120,19 @@
                     android:maxLines="1"
                     android:text="@string/map_legend_level_2"
                     android:textColor="@color/app_text_primary"
-                    android:textSize="11sp" />
+                    android:textSize="10sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
-                android:layout_height="28dp"
+                android:layout_height="22dp"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
                     android:src="@drawable/ic_map_marker"
                     app:tint="@color/map_marker_red" />
 
@@ -145,8 +145,101 @@
                     android:maxLines="1"
                     android:text="@string/map_legend_level_3"
                     android:textColor="@color/app_text_primary"
-                    android:textSize="11sp" />
+                    android:textSize="10sp" />
             </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/map_status_filters"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/bg_map_legend"
+        android:orientation="vertical"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/map_marker_legend">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/map_filters_title"
+            android:textColor="@color/app_text_muted"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="3dp"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/filter_received"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:buttonTint="@color/emergency_red"
+                android:checked="true"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@string/map_filter_received"
+                android:textColor="@color/app_text_primary"
+                android:textSize="12sp" />
+
+            <CheckBox
+                android:id="@+id/filter_not_sent"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:buttonTint="@color/emergency_red"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@string/map_filter_not_sent"
+                android:textColor="@color/app_text_primary"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <CheckBox
+                android:id="@+id/filter_sent"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:buttonTint="@color/emergency_red"
+                android:checked="true"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@string/map_filter_sent"
+                android:textColor="@color/app_text_primary"
+                android:textSize="12sp" />
+
+            <CheckBox
+                android:id="@+id/filter_resolved"
+                android:layout_width="0dp"
+                android:layout_height="30dp"
+                android:layout_weight="1"
+                android:buttonTint="@color/emergency_red"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:maxLines="1"
+                android:text="@string/map_filter_resolved"
+                android:textColor="@color/app_text_primary"
+                android:textSize="12sp" />
 
         </LinearLayout>
 
@@ -159,7 +252,7 @@
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toTopOf="@+id/map_marker_legend"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="0.45"
+        app:layout_constraintHeight_percent="0.34"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/title_map">
 
@@ -188,13 +281,16 @@
         android:id="@+id/title_list"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:paddingStart="10dp"
+        android:paddingTop="6dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="6dp"
         android:text="@string/visible_incidents"
         android:textColor="@color/app_text_primary"
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/map_marker_legend" />
+        app:layout_constraintTop_toBottomOf="@+id/map_status_filters" />
 
     <ListView
         android:id="@+id/incidents_list"

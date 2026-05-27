@@ -80,30 +80,183 @@
 
     <!-- ── ListView des incidents ── -->
     <!-- Les items sont peuplés par l'adaptateur Java/Kotlin existant -->
-    <TextView
-        android:id="@+id/empty_incidents_message"
+    <LinearLayout
+        android:id="@+id/summary_status_tabs"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:padding="24dp"
-        android:text="@string/no_active_incidents"
-        android:textColor="@color/app_text_secondary"
-        android:textSize="18sp"
-        android:visibility="gone" />
+        android:layout_height="wrap_content"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:visibility="gone"
+        android:baselineAligned="false">
 
-    <ListView
-        android:id="@+id/my_list_view"
+        <FrameLayout
+            android:id="@+id/summary_tab_not_sent"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_summary_folder_tab"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:duplicateParentState="true"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="2"
+                android:paddingStart="8dp"
+                android:paddingEnd="28dp"
+                android:text="@string/summary_tab_not_sent"
+                android:textColor="@color/summary_folder_tab_text"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/summary_tab_not_sent_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/bg_summary_tab_badge"
+                android:gravity="center"
+                android:minWidth="20dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/placeholder_zero"
+                android:textColor="@color/emergency_red"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/summary_tab_sent"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="2dp"
+            android:layout_marginEnd="2dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_summary_folder_tab"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:duplicateParentState="true"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="2"
+                android:paddingStart="8dp"
+                android:paddingEnd="28dp"
+                android:text="@string/summary_tab_sent"
+                android:textColor="@color/summary_folder_tab_text"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/summary_tab_sent_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/bg_summary_tab_badge"
+                android:gravity="center"
+                android:minWidth="20dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/placeholder_zero"
+                android:textColor="@color/emergency_red"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/summary_tab_finished"
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_summary_folder_tab"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:duplicateParentState="true"
+                android:ellipsize="end"
+                android:gravity="center"
+                android:maxLines="2"
+                android:paddingStart="8dp"
+                android:paddingEnd="28dp"
+                android:text="@string/summary_tab_finished"
+                android:textColor="@color/summary_folder_tab_text"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/summary_tab_finished_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="20dp"
+                android:layout_gravity="top|end"
+                android:layout_marginTop="4dp"
+                android:layout_marginEnd="4dp"
+                android:background="@drawable/bg_summary_tab_badge"
+                android:gravity="center"
+                android:minWidth="20dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
+                android:text="@string/placeholder_zero"
+                android:textColor="@color/emergency_red"
+                android:textSize="10sp"
+                android:textStyle="bold" />
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/summary_content_panel"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginStart="14dp"
+        android:layout_marginEnd="14dp"
+        android:background="@drawable/bg_summary_folder_panel"
         android:layout_weight="1"
-        android:divider="@color/app_divider"
-        android:dividerHeight="3dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
-        android:paddingTop="4dp"
-        android:paddingBottom="16dp"
-        android:clipToPadding="false"
-        android:scrollbars="none" />
+        android:paddingTop="8dp">
+
+        <TextView
+            android:id="@+id/empty_incidents_message"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="24dp"
+            android:text="@string/no_active_incidents"
+            android:textColor="@color/app_text_secondary"
+            android:textSize="18sp"
+            android:visibility="gone" />
+
+        <ListView
+            android:id="@+id/my_list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipToPadding="false"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="8dp"
+            android:paddingStart="0dp"
+            android:paddingTop="4dp"
+            android:paddingEnd="0dp"
+            android:paddingBottom="16dp"
+            android:scrollbars="none" />
+
+    </FrameLayout>
 
 </LinearLayout>
