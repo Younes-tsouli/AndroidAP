@@ -1,7 +1,6 @@
 package com.example.myapplication.screens;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,28 +16,22 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.example.myapplication.issue.EmergencyService;
 import com.example.myapplication.Notifiable;
 import com.example.myapplication.R;
+import com.example.myapplication.issue.Priority;
 
 import java.util.Arrays;
 import java.util.List;
 
-public class Screen4Fragment extends Fragment {
+public class ControlTowerFragment extends Fragment {
 
     private Notifiable notifiable;
 
     // ── Statuts disponibles dans le Spinner ───────────────────────────────────
-
-    /** Liste des statuts proposés dans le menu déroulant. */
-    private static final List<String> STATUS_OPTIONS = Arrays.asList(
-            "NIV.3 - CRITIQUE",
-            "NIV.2 - URGENT",
-            "NIV.1 - STABLE",
-            "INFO"
-    );
 
     // ── Niveaux de criticité ───────────────────────────────────────────────────
 
@@ -57,30 +50,30 @@ public class Screen4Fragment extends Fragment {
             return INFO;
         }
 
-        int color() {
+        int colorRes() {
             switch (this) {
-                case CRITIQUE: return Color.parseColor("#C62828");
-                case URGENT:   return Color.parseColor("#F9A825");
-                case STABLE:   return Color.parseColor("#2E7D32");
-                default:       return Color.parseColor("#757575");
+                case CRITIQUE: return R.color.severity_critical_color;
+                case URGENT:   return R.color.severity_urgent_color;
+                case STABLE:   return R.color.severity_stable_color;
+                default:       return R.color.severity_info_color;
             }
         }
 
-        int iconBackground() {
+        int iconBackgroundRes() {
             switch (this) {
-                case CRITIQUE: return Color.parseColor("#FFEBEE");
-                case URGENT:   return Color.parseColor("#FFF8E1");
-                case STABLE:   return Color.parseColor("#E8F5E9");
-                default:       return Color.parseColor("#F5F5F5");
+                case CRITIQUE: return R.color.severity_critical_surface;
+                case URGENT:   return R.color.severity_urgent_surface;
+                case STABLE:   return R.color.severity_stable_surface;
+                default:       return R.color.severity_info_surface;
             }
         }
 
-        String badge() {
+        int badgeStringRes() {
             switch (this) {
-                case CRITIQUE: return "CRITIQUE";
-                case URGENT:   return "URGENT";
-                case STABLE:   return "STABLE";
-                default:       return "INFO";
+                case CRITIQUE: return R.string.severity_critical;
+                case URGENT:   return R.string.severity_urgent;
+                case STABLE:   return R.string.severity_stable;
+                default:       return R.string.severity_info;
             }
         }
 
@@ -90,7 +83,20 @@ public class Screen4Fragment extends Fragment {
                 case CRITIQUE: return 0;
                 case URGENT:   return 1;
                 case STABLE:   return 2;
-                default:       return 3;
+                default:       return 2;
+            }
+        }
+
+        Priority priority() {
+            switch (this) {
+                case CRITIQUE:
+                    return Priority.CRITICAL;
+                case URGENT:
+                    return Priority.HIGH;
+                case STABLE:
+                case INFO:
+                default:
+                    return Priority.MEDIUM;
             }
         }
     }
@@ -113,7 +119,7 @@ public class Screen4Fragment extends Fragment {
                 } else {
                     severity = Severity.parse(raw);
                     title    = parts[0].trim();
-                    subtitle = parts[1].trim() + (parts.length >= 3 ? " — " + parts[2].trim() : "");
+                    subtitle = parts[1].trim() + (parts.length >= 3 ? " - " + parts[2].trim() : "");
                 }
             } else {
                 severity = Severity.parse(raw);
@@ -142,11 +148,13 @@ public class Screen4Fragment extends Fragment {
 
         private final LayoutInflater inflater;
         private final List<String>   data;
+        private final List<String>   statusOptions;
 
-        AlertAdapter(@NonNull Context ctx, @NonNull List<String> items) {
+        AlertAdapter(@NonNull Context ctx, @NonNull List<String> items, @NonNull List<String> statusOptions) {
             super(ctx, R.layout.item_alert, items);
             this.inflater = LayoutInflater.from(ctx);
             this.data     = items;
+            this.statusOptions = statusOptions;
         }
 
         @NonNull
@@ -177,12 +185,12 @@ public class Screen4Fragment extends Fragment {
             }
 
             // ── Couleurs ──────────────────────────────────────────────────────
-            int color = alert.severity.color();
+            int color = ContextCompat.getColor(getContext(), alert.severity.colorRes());
             holder.severityBar.setBackgroundColor(color);
-            holder.icon.setBackgroundColor(alert.severity.iconBackground());
+            holder.icon.setBackgroundColor(ContextCompat.getColor(getContext(), alert.severity.iconBackgroundRes()));
             holder.icon.setColorFilter(color);
             holder.badge.setBackgroundColor(color);
-            holder.badge.setText(alert.severity.badge());
+            holder.badge.setText(getContext().getString(alert.severity.badgeStringRes()));
 
             // ── Spinner : affichage du statut actuel ──────────────────────────
             // On détache le listener avant de changer la sélection
@@ -192,7 +200,7 @@ public class Screen4Fragment extends Fragment {
             ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
                     getContext(),
                     android.R.layout.simple_spinner_item,
-                    STATUS_OPTIONS
+                    statusOptions
             );
             spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             holder.spinner.setAdapter(spinnerAdapter);
@@ -209,7 +217,7 @@ public class Screen4Fragment extends Fragment {
                     if (tag == null) return;
                     int itemPosition = (int) tag;
 
-                    String selectedStatus = STATUS_OPTIONS.get(spinnerPos);
+                    String selectedStatus = statusOptions.get(spinnerPos);
                     String currentRaw     = data.get(itemPosition);
                     Alert  currentAlert   = new Alert(currentRaw);
 
@@ -224,8 +232,12 @@ public class Screen4Fragment extends Fragment {
                     );
 
                     // ── Sauvegarde dans EmergencyService ─────────────────────
-                    // EmergencyService doit exposer : updateAlert(int index, String newRaw)
-                    EmergencyService.getInstance().updateAlert(itemPosition, newRaw);
+                    Severity selectedSeverity = Severity.parse(selectedStatus);
+                    EmergencyService.getInstance().updateAlertPriority(
+                            itemPosition,
+                            newRaw,
+                            selectedSeverity.priority()
+                    );
 
                     // Mise à jour locale de la liste pour refléter la couleur sans rechargement complet
                     data.set(itemPosition, newRaw);
@@ -233,7 +245,7 @@ public class Screen4Fragment extends Fragment {
 
                     Toast.makeText(
                             getContext(),
-                            "Statut mis à jour : " + selectedStatus,
+                            getContext().getString(R.string.alert_status_updated, selectedStatus),
                             Toast.LENGTH_SHORT
                     ).show();
                 }
@@ -279,7 +291,7 @@ public class Screen4Fragment extends Fragment {
                              ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View view = inflater.inflate(R.layout.fragment_screen4, container, false);
+        View view = inflater.inflate(R.layout.fragment_control_tower, container, false);
 
         ListView     listView   = view.findViewById(R.id.alerts_list_view);
         LinearLayout emptyState = view.findViewById(R.id.empty_state_layout);
@@ -290,13 +302,14 @@ public class Screen4Fragment extends Fragment {
         if (alerts == null || alerts.isEmpty()) {
             listView.setVisibility(View.GONE);
             emptyState.setVisibility(View.VISIBLE);
-            countBadge.setText("0");
+            countBadge.setText(R.string.placeholder_zero);
             return view;
         }
 
         countBadge.setText(String.valueOf(alerts.size()));
 
-        AlertAdapter adapter = new AlertAdapter(requireContext(), alerts);
+        List<String> statusOptions = Arrays.asList(getResources().getStringArray(R.array.alert_status_options));
+        AlertAdapter adapter = new AlertAdapter(requireContext(), alerts, statusOptions);
         listView.setAdapter(adapter);
 
         // Tap sur un item → toast informatif (le Spinner gère déjà le changement de statut)
@@ -304,7 +317,7 @@ public class Screen4Fragment extends Fragment {
             Alert alert = new Alert(alerts.get(position));
             Toast.makeText(
                     requireContext(),
-                    "Alerte : " + alert.title,
+                    getString(R.string.alert_prefix, alert.title),
                     Toast.LENGTH_SHORT
             ).show();
         });

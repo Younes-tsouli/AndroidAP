@@ -1,93 +1,118 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF"
-    android:orientation="vertical"
+    android:background="@color/app_background_alt"
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:id="@+id/victim_role_button"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#B71C1C"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:gravity="center"
+        android:layout_height="match_parent"
         android:orientation="vertical"
-        android:padding="28dp">
+        android:padding="10dp">
 
-        <ImageView
-            android:layout_width="92dp"
-            android:layout_height="92dp"
-            android:src="@drawable/ic_home_user"
-            app:tint="#FFFFFF" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="sans-serif-condensed"
-            android:letterSpacing="0.08"
-            android:text="UTILISATEUR"
-            android:textColor="#FFFFFF"
-            android:textSize="27sp"
-            android:textStyle="bold" />
-
-        <TextView
+        <LinearLayout
+            android:id="@+id/victim_role_button"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_height="0dp"
+            android:layout_marginBottom="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_role_user"
+            android:clickable="true"
+            android:elevation="2dp"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:gravity="center"
-            android:text="Signaler un accident et suivre l'intervention"
-            android:textColor="#FFCDD2"
-            android:textSize="16sp" />
+            android:orientation="vertical"
+            android:padding="28dp">
+
+            <ImageView
+                android:layout_width="92dp"
+                android:layout_height="92dp"
+                android:src="@drawable/ic_home_user"
+                app:tint="@color/app_on_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="sans-serif-condensed"
+                android:letterSpacing="0.08"
+                android:text="@string/role_user"
+                android:textColor="@color/app_on_primary"
+                android:textSize="27sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/role_user_desc"
+                android:textColor="@color/emergency_red_light"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/rescue_role_button"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="6dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_role_rescue"
+            android:clickable="true"
+            android:elevation="2dp"
+            android:focusable="true"
+            android:foreground="?attr/selectableItemBackground"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="28dp">
+
+            <ImageView
+                android:layout_width="92dp"
+                android:layout_height="92dp"
+                android:src="@drawable/ic_home_rescue"
+                app:tint="@color/emergency_red" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="sans-serif-condensed"
+                android:letterSpacing="0.08"
+                android:text="@string/role_rescue"
+                android:textColor="@color/emergency_red"
+                android:textSize="27sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="@string/role_rescue_desc"
+                android:textColor="@color/app_text_secondary"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/rescue_role_button"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:background="#FFFFFF"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?attr/selectableItemBackground"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:padding="28dp">
+    <ImageButton
+        android:id="@+id/theme_button"
+        android:layout_width="46dp"
+        android:layout_height="46dp"
+        android:layout_gravity="top|end"
+        android:layout_margin="18dp"
+        android:background="@drawable/bg_theme_toggle"
+        android:contentDescription="@string/desc_theme_toggle_light"
+        android:elevation="6dp"
+        android:padding="11dp"
+        android:scaleType="fitCenter"
+        android:src="@drawable/ic_theme_sun" />
 
-        <ImageView
-            android:layout_width="92dp"
-            android:layout_height="92dp"
-            android:src="@drawable/ic_home_rescue" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:fontFamily="sans-serif-condensed"
-            android:letterSpacing="0.08"
-            android:text="SECOURS"
-            android:textColor="#B71C1C"
-            android:textSize="27sp"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:gravity="center"
-            android:text="Gerer les alertes, la carte et les statuts"
-            android:textColor="#616161"
-            android:textSize="16sp" />
-
-    </LinearLayout>
-
-</LinearLayout>
+</FrameLayout>

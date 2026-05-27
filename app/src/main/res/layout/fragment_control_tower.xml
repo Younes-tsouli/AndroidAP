@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FAFAFA"
+    android:background="@color/app_background"
     android:layout_marginTop="25sp">
 
     <!-- ── Top App Bar ── -->
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
-        android:background="#FFFFFF"
+        android:background="@color/app_surface"
         android:paddingStart="20dp"
         android:paddingEnd="16dp"
         android:gravity="center_vertical"
@@ -22,15 +22,15 @@
         <View
             android:layout_width="4dp"
             android:layout_height="28dp"
-            android:background="#C62828"
+            android:background="@color/emergency_red"
             android:layout_marginEnd="12dp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="EMERGENCY"
-            android:textColor="#C62828"
+            android:text="@string/app_title"
+            android:textColor="@color/emergency_red"
             android:textSize="20sp"
             android:textStyle="bold"
             android:letterSpacing="0.08" />
@@ -39,7 +39,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:src="@drawable/emergency"
-            app:tint="#C62828" />
+            app:tint="@color/emergency_red" />
 
     </LinearLayout>
 
@@ -63,17 +63,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tour de Contrôle"
+                android:text="@string/control_tower"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:textColor="#212121" />
+                android:textColor="@color/app_text_primary" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Alertes en temps réel"
+                android:text="@string/realtime_alerts"
                 android:textSize="13sp"
-                android:textColor="#9E9E9E"
+                android:textColor="@color/app_text_label"
                 android:layout_marginTop="2dp" />
 
         </LinearLayout>
@@ -83,15 +83,15 @@
             android:id="@+id/alerts_count_badge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="0"
-            android:textColor="#FFFFFF"
+            android:text="@string/placeholder_zero"
+            android:textColor="@color/app_on_primary"
             android:textSize="13sp"
             android:textStyle="bold"
             android:paddingStart="10dp"
             android:paddingEnd="10dp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
-            android:background="#C62828" />
+            android:background="@color/emergency_red" />
 
     </LinearLayout>
 
@@ -109,24 +109,24 @@
         <ImageView
             android:layout_width="72dp"
             android:layout_height="72dp"
-            android:src="@android:drawable/ic_dialog_info"
-            app:tint="#E0E0E0" />
+            android:src="@drawable/ic_menu_alert"
+            app:tint="@color/app_info_icon" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Aucune alerte active"
+            android:text="@string/no_active_alerts"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="#BDBDBD"
+            android:textColor="@color/app_text_disabled"
             android:layout_marginTop="16dp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Le système est opérationnel"
+            android:text="@string/system_operational"
             android:textSize="14sp"
-            android:textColor="#BDBDBD"
+            android:textColor="@color/app_text_disabled"
             android:layout_marginTop="6dp"
             android:textAlignment="center" />
 
@@ -138,7 +138,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:divider="@color/light_gray"
+        android:divider="@color/app_divider"
         android:dividerHeight="3dp"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"

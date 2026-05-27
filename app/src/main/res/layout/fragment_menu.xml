@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/app_surface"
     tools:context=".menu.MenuFragment">
 
     <LinearLayout
@@ -15,14 +16,14 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="3dp"
-            android:background="#B71C1C" />
+            android:background="@color/emergency_red" />
 
         <!-- Barre de navigation -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:orientation="horizontal"
-            android:background="#FFFFFF"
+            android:background="@color/app_surface"
             android:elevation="8dp">
 
             <!-- Tab 0 — ACTIF -->
@@ -33,7 +34,7 @@
                 android:layout_weight="1"
                 android:orientation="vertical"
                 android:gravity="center"
-                android:background="#B71C1C"
+                android:background="@color/emergency_red"
                 android:padding="6dp">
 
                 <ImageView
@@ -41,13 +42,13 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:src="@drawable/ic_header_home"
-                    app:tint="#FFFFFF" />
+                    app:tint="@color/app_on_primary" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ACCUEIL"
-                    android:textColor="#FFFFFF"
+                    android:text="@string/menu_home"
+                    android:textColor="@color/app_on_primary"
                     android:textSize="8sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.1" />
@@ -68,13 +69,13 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:src="@drawable/ic_menu_alert"
-                    app:tint="#888888" />
+                    app:tint="@color/nav_inactive" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SIGNAL"
-                    android:textColor="#888888"
+                    android:text="@string/menu_signal"
+                    android:textColor="@color/nav_inactive"
                     android:textSize="8sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.1" />
@@ -95,13 +96,13 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:src="@drawable/ic_menu_clipboard"
-                    app:tint="#888888" />
+                    app:tint="@color/nav_inactive" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="SUIVI"
-                    android:textColor="#888888"
+                    android:text="@string/menu_track"
+                    android:textColor="@color/nav_inactive"
                     android:textSize="8sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.1" />
@@ -122,13 +123,13 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:src="@drawable/ic_menu_location"
-                    app:tint="#888888" />
+                    app:tint="@color/nav_inactive" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="CARTE"
-                    android:textColor="#888888"
+                    android:text="@string/menu_map"
+                    android:textColor="@color/nav_inactive"
                     android:textSize="8sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.1" />
@@ -149,13 +150,13 @@
                     android:layout_width="22dp"
                     android:layout_height="22dp"
                     android:src="@drawable/ic_menu_alert"
-                    app:tint="#888888" />
+                    app:tint="@color/nav_inactive" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="ALERTES"
-                    android:textColor="#888888"
+                    android:text="@string/menu_alerts"
+                    android:textColor="@color/nav_inactive"
                     android:textSize="8sp"
                     android:textStyle="bold"
                     android:letterSpacing="0.1" />

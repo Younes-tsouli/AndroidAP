@@ -1,3 +1,158 @@
 <resources>
-    <string name="app_name">Emergency</string>
+    <string name="app_name">SafeRoads</string>
+    <string name="app_title">SAFEROADS</string>
+
+    <!-- Accueil / choix du mode -->
+    <string name="role_user">UTILISATEUR</string>
+    <string name="role_user_desc">Signaler un accident et suivre l\'intervention</string>
+    <string name="role_rescue">SECOURS</string>
+    <string name="role_rescue_desc">Gérer les alertes, la carte et les statuts</string>
+    <string name="mode_user">MODE UTILISATEUR</string>
+    <string name="mode_rescue">MODE SECOURS</string>
+
+    <!-- Menu -->
+    <string name="menu_home">ACCUEIL</string>
+    <string name="menu_signal">SIGNAL</string>
+    <string name="menu_track">SUIVI</string>
+    <string name="menu_map">CARTE</string>
+    <string name="menu_alerts">ALERTES</string>
+
+    <!-- Accueil utilisateur -->
+    <string name="user_space">ESPACE UTILISATEUR</string>
+    <string name="need_help">Besoin d\'aide ?</string>
+    <string name="sos_desc">Envoyez une alerte avec votre position automatiquement.</string>
+    <string name="sos_button">SOS</string>
+    <string name="track_button">SUIVI</string>
+
+    <!-- Détail d'intervention -->
+    <string name="accident_title_placeholder">Titre de l\'accident</string>
+    <string name="accident_desc_placeholder">Description détaillée de ce qui s\'est passé...</string>
+    <string name="photo_transmitted">PHOTO TRANSMISE</string>
+    <string name="photo_transmitted_inline">Photo transmise</string>
+    <string name="intervention_status">STATUT DE L\'INTERVENTION</string>
+    <string name="change_status">Modifier le statut de l\'intervention</string>
+    <string name="status_received">Reçu</string>
+    <string name="status_sent">Secours envoyés</string>
+    <string name="status_resolved">Résolu</string>
+    <string name="status_prefix">Statut : %1$s</string>
+    <string name="status_reported_prefix">Statut : signalé</string>
+    <string name="status_timeline_title">Suivi de l’intervention</string>
+    <string name="status_step_received">Signalement reçu</string>
+    <string name="status_step_sent">Secours envoyés</string>
+    <string name="status_step_resolved">Intervention terminée</string>
+    <string name="timeline_arrow">→</string>
+    <string name="timeline_step_1">1</string>
+    <string name="timeline_step_2">2</string>
+    <string name="timeline_step_3">3</string>
+    <string name="emergency_protocol">PROTOCOLE D\'URGENCE</string>
+    <string name="protocol_prefix">Protocole : ...</string>
+    <string name="safety_protocol_prefix">Protocole de sécurité :\n%1$s</string>
+    <string name="protocol_urban">Enfilez votre gilet de sécurité, balisez la zone avec un triangle à 30 mètres et prévenez les autres usagers.</string>
+    <string name="protocol_highway">Évacuez immédiatement le véhicule et placez-vous derrière la glissière de sécurité. Ne tentez pas de placer le triangle sur l\'autoroute.</string>
+
+    <!-- Bilan / incidents -->
+    <string name="title_summary">BILAN</string>
+    <string name="active_incidents">Incidents actifs</string>
+    <string name="no_active_incidents">Aucun incident actif</string>
+
+    <!-- Signalement -->
+    <string name="quick_report">Signalement rapide</string>
+    <string name="auto_location">Localisation ajoutée automatiquement</string>
+    <string name="report_hint_title">Que voyez-vous ?</string>
+    <string name="report_hint_desc">Description courte (facultative)</string>
+    <string name="environment">ENVIRONNEMENT</string>
+    <string name="gps_searching">GPS...</string>
+    <string name="gps_denied">GPS refusé</string>
+    <string name="gps_authorize">Autorisez GPS</string>
+    <string name="gps_blocked">GPS bloqué</string>
+    <string name="gps_enable">Activez GPS</string>
+    <string name="gps_found">GPS OK</string>
+    <string name="toast_waiting_gps">Position GPS en cours. Autorisez la localisation et patientez quelques secondes.</string>
+    <string name="env_urban">Urbain</string>
+    <string name="env_highway">Autoroute</string>
+    <string name="photo">PHOTO</string>
+    <string name="no_photo">Pas de photo</string>
+    <string name="photo_ready">Photo prête</string>
+    <string name="toast_photo_added">Photo ajoutée au signalement.</string>
+    <string name="camera_denied">Permission caméra refusée : aucune photo ne sera ajoutée.</string>
+    <string name="photo_file_error">Impossible de préparer le fichier photo.</string>
+    <string name="default_description">Aucune description fournie.</string>
+    <string name="toast_report_sent">Incident signalé avec position GPS !</string>
+    <string name="toast_report_sent_with_photo">Incident signalé avec position GPS et photo !</string>
+    <string name="title_required">Titre obligatoire</string>
+    <string name="toast_title_required">Ajoutez un titre pour envoyer le signalement.</string>
+    <string name="send_alert">ENVOYER L\'ALERTE</string>
+
+    <!-- Tour de contrôle -->
+    <string name="control_tower">Tour de contrôle</string>
+    <string name="realtime_alerts">Alertes en temps réel</string>
+    <string name="no_active_alerts">Aucune alerte active</string>
+    <string name="system_operational">Le système est opérationnel</string>
+    <string name="alert_status_updated">Niveau mis à jour : %1$s</string>
+    <string name="alert_prefix">Alerte : %1$s</string>
+    <string name="alert_status_field">Statut : %1$s</string>
+    <string name="alert_priority_field">Priorité : %1$s</string>
+    <string name="alert_photo_yes_field">Photo : oui</string>
+    <string name="rescue_deployment_log">DÉPLOIEMENT DES SECOURS pour : %1$s</string>
+    <string name="severity_critical">CRITIQUE</string>
+    <string name="severity_urgent">URGENT</string>
+    <string name="severity_stable">STABLE</string>
+    <string name="severity_info">INFO</string>
+    <string name="severity_level_1">NIV.1</string>
+    <string name="severity_level_2">NIV.2</string>
+    <string name="severity_level_3">NIV.3</string>
+    <string name="priority_low">faible</string>
+    <string name="priority_medium">moyenne</string>
+    <string name="priority_high">haute</string>
+    <string name="priority_critical">critique</string>
+
+    <!-- Carte -->
+    <string name="nearby_incidents">Incidents à proximité</string>
+    <string name="visible_incidents">Incidents visibles</string>
+    <string name="map_my_position">Votre position</string>
+    <string name="map_personal_position">Position personnelle</string>
+    <string name="map_recentering">Recherche de votre position...</string>
+    <string name="map_visible_location_format">Lat. : %1$.4f, Lon. : %2$.4f</string>
+    <string name="map_legend_my_position">Ma position</string>
+    <string name="map_legend_level_1">STABLE</string>
+    <string name="map_legend_level_2">URGENT</string>
+    <string name="map_legend_level_3">CRITIQUE</string>
+
+    <!-- Item alerte -->
+    <string name="alert_label">Alerte</string>
+    <string name="details_label">Détails...</string>
+    <string name="level_label">NIV</string>
+
+    <!-- Valeurs générales -->
+    <string name="placeholder_zero">0</string>
+
+    <!-- Descriptions d'accessibilité -->
+    <string name="desc_accident_photo">Photo de l\'accident</string>
+    <string name="desc_transmitted_photo">Photo transmise aux secours</string>
+    <string name="desc_exit">Sortie</string>
+    <string name="desc_center_personal_location">Recentrer sur votre position</string>
+    <string name="desc_theme_toggle_light">Mode jour activé. Passer en mode nuit</string>
+    <string name="desc_theme_toggle_dark">Mode nuit activé. Passer en mode jour</string>
+
+    <!-- Notifications -->
+    <string name="notification_channel_new_accident_name">Nouveaux accidents</string>
+    <string name="notification_channel_new_accident_desc">Alertes envoyées aux secours lors d’un nouveau signalement.</string>
+    <string name="notification_channel_status_name">Suivi d’intervention</string>
+    <string name="notification_channel_status_desc">Mises à jour envoyées à l’utilisateur quand les secours changent le statut.</string>
+    <string name="notification_new_accident_title">Nouvel accident signalé</string>
+    <string name="notification_new_accident_text">%1$s vient d’être signalé. Les secours peuvent consulter le bilan.</string>
+    <string name="notification_status_update_title">Intervention mise à jour</string>
+    <string name="notification_status_update_text">%1$s : %2$s</string>
+
+    <string-array name="alert_status_options">
+        <item>NIV.3 - CRITIQUE</item>
+        <item>NIV.2 - URGENT</item>
+        <item>NIV.1 - STABLE</item>
+    </string-array>
+
+    <string-array name="issue_status_options">
+        <item>Reçu</item>
+        <item>Secours envoyés</item>
+        <item>Résolu</item>
+    </string-array>
 </resources>

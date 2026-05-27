@@ -4,13 +4,14 @@
     android:id="@+id/control_root"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/app_background"
     android:orientation="vertical">
 
     <LinearLayout
         android:id="@+id/control_header"
         android:layout_width="match_parent"
         android:layout_height="56dp"
-        android:background="#FFFFFF"
+        android:background="@color/app_surface"
         android:elevation="4dp"
         android:gravity="center_vertical"
         android:orientation="horizontal"
@@ -26,21 +27,32 @@
             android:fontFamily="sans-serif-condensed"
             android:gravity="start"
             android:letterSpacing="0.08"
-            android:text="EMERGENCY"
-            android:textColor="#B71C1C"
+            android:text="@string/app_title"
+            android:textColor="@color/emergency_red"
             android:textSize="20sp"
             android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/theme_button"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/bg_theme_toggle"
+            android:contentDescription="@string/desc_theme_toggle_light"
+            android:padding="10dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/ic_theme_sun" />
 
         <ImageButton
             android:id="@+id/home_button"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="Sortie"
+            android:contentDescription="@string/desc_exit"
             android:padding="12dp"
             android:scaleType="fitCenter"
             android:src="@drawable/ic_header_exit"
-            app:tint="#B71C1C" />
+            app:tint="@color/emergency_red" />
 
     </LinearLayout>
 

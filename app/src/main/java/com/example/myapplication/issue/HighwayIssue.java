@@ -2,6 +2,8 @@ package com.example.myapplication.issue;
 
 import android.os.Parcel;
 
+import com.example.myapplication.R;
+
 public class HighwayIssue extends Issue {
 
     public static final Creator<HighwayIssue> CREATOR = new Creator<HighwayIssue>() {
@@ -25,7 +27,7 @@ public class HighwayIssue extends Issue {
     }
 
     @Override
-    public String getSafetyProtocol() {
-        return "Évacuez immédiatement le véhicule et placez-vous derrière la glissière de sécurité. Ne tentez pas de placer le triangle sur l'autoroute.";
+    public int getSafetyProtocolResId() {
+        return R.string.protocol_highway;
     }
 }

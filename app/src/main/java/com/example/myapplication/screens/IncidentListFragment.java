@@ -12,6 +12,8 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
+import com.example.myapplication.ControlActivity;
+import com.example.myapplication.NotificationController;
 import com.example.myapplication.issue.ClickableIssue;
 import com.example.myapplication.issue.Issue;
 import com.example.myapplication.issue.IssueRepository;
@@ -22,11 +24,12 @@ import com.example.myapplication.adapter.IssueAdapter;
 
 import java.util.List;
 
-public class Screen2Fragment extends Fragment implements ClickableIssue<Issue> {
+public class IncidentListFragment extends Fragment implements ClickableIssue<Issue> {
 
     private Notifiable notifiable;
     private List<Issue> myIssues;
     private IssueAdapter adapter;
+    private boolean statusEditable;
 
     @Override
     public void onAttach(@NonNull Context context) {
@@ -38,7 +41,7 @@ public class Screen2Fragment extends Fragment implements ClickableIssue<Issue> {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_screen2, container, false);
+        View view = inflater.inflate(R.layout.fragment_incident_list, container, false);
 
         // 1. Récupération des données depuis le Singleton Repository
         myIssues = IssueRepository.getInstance().getIssues();
@@ -49,7 +52,12 @@ public class Screen2Fragment extends Fragment implements ClickableIssue<Issue> {
         TextView emptyMessage = view.findViewById(R.id.empty_incidents_message);
         countBadge.setText(String.valueOf(myIssues.size()));
 
-        adapter = new IssueAdapter(requireContext(), R.layout.item_alert, myIssues, this);
+        String role = getArguments() != null
+                ? getArguments().getString(ControlActivity.EXTRA_ROLE, ControlActivity.ROLE_VICTIM)
+                : ControlActivity.ROLE_VICTIM;
+        statusEditable = ControlActivity.ROLE_RESCUE.equals(role);
+
+        adapter = new IssueAdapter(requireContext(), R.layout.item_alert, myIssues, this, statusEditable);
         listView.setAdapter(adapter);
         boolean hasIssues = !myIssues.isEmpty();
         listView.setVisibility(hasIssues ? View.VISIBLE : View.GONE);
@@ -66,12 +74,16 @@ public class Screen2Fragment extends Fragment implements ClickableIssue<Issue> {
 
     @Override
     public void onRatingBarChange(int itemIndex, float value, IssueAdapter adapter, List<Issue> items) {
+        if (!statusEditable) return;
+
         Issue issue = items.get(itemIndex);
         Status newStatus = Status.fromRating(value);
+        if (issue.getStatus() == newStatus) return;
         
         // C'EST ICI QUE LA MAGIE OPÈRE :
         // Cette ligne modifie l'objet, qui notifie l'EmergencyService automatiquement.
-        issue.setStatus(newStatus); 
+        issue.setStatus(newStatus);
+        NotificationController.notifyStatusUpdateForUser(requireContext(), issue);
 
         notifiable.onDataChange(2, issue, 2, value);
         Log.d("DEBUG", "Nouveau statut pour " + issue.getTitle() + " : " + newStatus);

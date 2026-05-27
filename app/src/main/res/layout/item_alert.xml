@@ -11,7 +11,7 @@
     android:layout_marginBottom="8dp"
     app:cardCornerRadius="12dp"
     app:cardElevation="2dp"
-    app:cardBackgroundColor="#FFFFFF">
+    app:cardBackgroundColor="@color/app_surface">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,7 +25,7 @@
             android:id="@+id/alert_severity_bar"
             android:layout_width="5dp"
             android:layout_height="match_parent"
-            android:background="#C62828"
+            android:background="@color/emergency_red"
             android:minHeight="72dp" />
 
         <!-- Icône de catégorie -->
@@ -35,9 +35,9 @@
             android:layout_height="40dp"
             android:layout_marginStart="14dp"
             android:padding="8dp"
-            android:src="@android:drawable/ic_dialog_alert"
-            android:background="#FFEBEE"
-            app:tint="#C62828" />
+            android:src="@drawable/ic_menu_alert"
+            android:background="@color/severity_critical_surface"
+            app:tint="@color/emergency_red" />
 
         <!-- Texte principal, sous-titre et Spinner de statut -->
         <LinearLayout
@@ -54,10 +54,10 @@
                 android:id="@+id/alert_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Alerte"
+                android:text="@string/alert_label"
                 android:textSize="15sp"
                 android:textStyle="bold"
-                android:textColor="#212121"
+                android:textColor="@color/app_text_primary"
                 android:maxLines="1"
                 android:ellipsize="end" />
 
@@ -65,9 +65,9 @@
                 android:id="@+id/alert_subtitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Détails..."
+                android:text="@string/details_label"
                 android:textSize="13sp"
-                android:textColor="#757575"
+                android:textColor="@color/app_text_muted"
                 android:layout_marginTop="3dp"
                 android:maxLines="2"
                 android:ellipsize="end"
@@ -91,15 +91,15 @@
             android:layout_gravity="top"
             android:layout_marginTop="14dp"
             android:layout_marginEnd="14dp"
-            android:text="NIV"
+            android:text="@string/level_label"
             android:textSize="11sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
+            android:textColor="@color/app_on_primary"
             android:paddingStart="8dp"
             android:paddingEnd="8dp"
             android:paddingTop="4dp"
             android:paddingBottom="4dp"
-            android:background="#C62828" />
+            android:background="@color/emergency_red" />
 
     </LinearLayout>
 

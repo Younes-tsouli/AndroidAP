@@ -1,6 +1,9 @@
 package com.example.myapplication.issue;
 
+import android.content.Context;
 import android.util.Log;
+
+import com.example.myapplication.R;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,7 +15,9 @@ public class EmergencyService implements IssueObserver {
     private static EmergencyService instance;
 
     private final List<String> alerts = new ArrayList<>();
+    private final List<String> alertIssueIds = new ArrayList<>();
     private final Map<String, Integer> alertIndexesByIssueId = new HashMap<>();
+    private Context appContext;
 
     private EmergencyService() {}
 
@@ -21,6 +26,12 @@ public class EmergencyService implements IssueObserver {
             instance = new EmergencyService();
         }
         return instance;
+    }
+
+    public void initialize(Context context) {
+        if (context != null) {
+            appContext = context.getApplicationContext();
+        }
     }
 
     @Override
@@ -32,7 +43,7 @@ public class EmergencyService implements IssueObserver {
         saveOrUpdateIssueAlert(issue, message);
 
         if (issue.getStatus() == Status.AID_SENT) {
-            Log.w(TAG, "DEPLOIEMENT DES SECOURS pour: " + issue.getTitle());
+            Log.w(TAG, text(R.string.rescue_deployment_log, issue.getTitle()));
         }
     }
 
@@ -49,9 +60,14 @@ public class EmergencyService implements IssueObserver {
         return new ArrayList<>(alerts);
     }
 
-    public void updateAlert(int index, String newRaw) {
-        if (index >= 0 && index < alerts.size()) {
-            alerts.set(index, newRaw);
+    public void updateAlertPriority(int index, String newRaw, Priority priority) {
+        if (index < 0 || index >= alerts.size()) return;
+
+        alerts.set(index, newRaw);
+        String issueId = index < alertIssueIds.size() ? alertIssueIds.get(index) : null;
+        Issue issue = IssueRepository.getInstance().findIssueById(issueId);
+        if (issue != null && priority != null) {
+            issue.setPriority(priority);
         }
     }
 
@@ -60,46 +76,75 @@ public class EmergencyService implements IssueObserver {
 
         if (existingIndex != null && existingIndex >= 0 && existingIndex < alerts.size()) {
             alerts.set(existingIndex, message);
+            setIssueIdAt(existingIndex, issue.getId());
             return;
         }
 
         alerts.add(message);
+        alertIssueIds.add(issue.getId());
         alertIndexesByIssueId.put(issue.getId(), alerts.size() - 1);
+    }
+
+    private void setIssueIdAt(int index, String issueId) {
+        while (alertIssueIds.size() <= index) {
+            alertIssueIds.add(null);
+        }
+        alertIssueIds.set(index, issueId);
     }
 
     private String buildAlertMessage(Issue issue) {
         return getSeverityLabel(issue)
                 + " - " + issue.getTitle()
-                + " - Statut: " + getStatusLabel(issue.getStatus())
-                + " - Priorite: " + issue.getPriority().getName();
+                + " - " + text(R.string.alert_status_field, getStatusLabel(issue.getStatus()))
+                + " - " + text(R.string.alert_priority_field, getPriorityLabel(issue.getPriority()))
+                + (issue.hasPhoto() ? " - " + text(R.string.alert_photo_yes_field) : "");
     }
 
     private String getStatusLabel(Status status) {
         switch (status) {
             case AID_SENT:
-                return "Secours envoyes";
+                return text(R.string.status_sent);
             case RESOLVED:
-                return "Resolu";
+                return text(R.string.status_resolved);
             case RECEIVED:
             default:
-                return "Recu";
+                return text(R.string.status_received);
+        }
+    }
+
+    private String getPriorityLabel(Priority priority) {
+        switch (priority) {
+            case CRITICAL:
+                return text(R.string.priority_critical);
+            case HIGH:
+                return text(R.string.priority_high);
+            case MEDIUM:
+                return text(R.string.priority_medium);
+            case LOW:
+            default:
+                return text(R.string.priority_low);
         }
     }
 
     private String getSeverityLabel(Issue issue) {
         if (issue.getStatus() == Status.RESOLVED) {
-            return "NIV.1";
+            return text(R.string.severity_level_1);
         }
 
         switch (issue.getPriority()) {
             case CRITICAL:
-                return "NIV.3";
+                return text(R.string.severity_level_3);
             case HIGH:
-                return "NIV.2";
+                return text(R.string.severity_level_2);
             case MEDIUM:
             case LOW:
             default:
-                return "NIV.1";
+                return text(R.string.severity_level_1);
         }
+    }
+
+    private String text(int resId, Object... args) {
+        if (appContext == null) return "";
+        return appContext.getString(resId, args);
     }
 }

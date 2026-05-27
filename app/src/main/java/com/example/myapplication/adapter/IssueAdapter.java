@@ -22,15 +22,27 @@ public class IssueAdapter extends ArrayAdapter<Issue> {
     private final int layoutResourceId;
     private final List<Issue> data;
     private final ClickableIssue<Issue> callback;
+    private final boolean statusEditable;
 
     // Généré automatiquement depuis l'enum Status (ordre déclaration)
     private static final Status[] STATUS_VALUES = Status.values();
 
     public IssueAdapter(Context context, int layoutResourceId, List<Issue> data, ClickableIssue<Issue> callback) {
+        this(context, layoutResourceId, data, callback, true);
+    }
+
+    public IssueAdapter(
+            Context context,
+            int layoutResourceId,
+            List<Issue> data,
+            ClickableIssue<Issue> callback,
+            boolean statusEditable
+    ) {
         super(context, layoutResourceId, data);
         this.layoutResourceId = layoutResourceId;
         this.data = data;
         this.callback = callback;
+        this.statusEditable = statusEditable;
     }
 
     static class IssueHolder {
@@ -62,26 +74,36 @@ public class IssueAdapter extends ArrayAdapter<Issue> {
         Issue issue = data.get(position);
 
         holder.txtTitle.setText(issue.getTitle());
-        holder.txtDescription.setText(issue.getDescription());
+        String subtitle = issue.getDescription();
+        if (issue.hasPhoto()) {
+            subtitle += "\n" + getContext().getString(R.string.photo_transmitted_inline);
+        }
+        if (!statusEditable) {
+            subtitle += "\n" + getContext().getString(
+                    R.string.status_prefix,
+                    getStatusLabel(issue.getStatus())
+            );
+        }
+        holder.txtDescription.setText(subtitle);
         holder.imgPriority.setImageResource(issue.getPriorityIcon());
 
         // ── Spinner alimenté par Status.values() ──────────────────────────────
         holder.spinnerStatus.setTag(null);
+        holder.spinnerStatus.setOnItemSelectedListener(null);
+        holder.spinnerStatus.setVisibility(statusEditable ? View.VISIBLE : View.GONE);
 
-        // Labels affichés = nom de chaque valeur de l'enum
-        ArrayAdapter<Status> spinnerAdapter = new ArrayAdapter<Status>(
+        row.setOnClickListener(v -> callback.onClickItem(data, position));
+
+        if (!statusEditable) {
+            return row;
+        }
+
+        String[] statusLabels = getContext().getResources().getStringArray(R.array.issue_status_options);
+        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(
                 getContext(),
                 android.R.layout.simple_spinner_item,
-                STATUS_VALUES
-        ) {
-            // Affiche le nom lisible dans la liste déroulante
-            @Override
-            public View getDropDownView(int pos, View recycled, ViewGroup p) {
-                View v = super.getDropDownView(pos, recycled, p);
-                ((TextView) v).setText(STATUS_VALUES[pos].name());
-                return v;
-            }
-        };
+                statusLabels
+        );
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         holder.spinnerStatus.setAdapter(spinnerAdapter);
 
@@ -109,5 +131,17 @@ public class IssueAdapter extends ArrayAdapter<Issue> {
         });
 
         return row;
+    }
+
+    private String getStatusLabel(Status status) {
+        switch (status) {
+            case AID_SENT:
+                return getContext().getString(R.string.status_sent);
+            case RESOLVED:
+                return getContext().getString(R.string.status_resolved);
+            case RECEIVED:
+            default:
+                return getContext().getString(R.string.status_received);
+        }
     }
 }

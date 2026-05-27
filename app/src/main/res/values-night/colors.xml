@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="emergency_red">#EF5350</color>
+    <color name="emergency_red_dark">#2A0B0B</color>
+    <color name="emergency_red_soft">#FF6F61</color>
+    <color name="emergency_red_light">#FFDAD6</color>
+
+    <color name="app_background">#111111</color>
+    <color name="app_background_alt">#151515</color>
+    <color name="app_surface">#1B1B1D</color>
+    <color name="app_surface_variant">#242426</color>
+    <color name="app_surface_pressed">#303033</color>
+    <color name="app_border">#3A3A3E</color>
+    <color name="app_divider">#2C2C30</color>
+
+    <color name="app_text_primary">#F4F4F5</color>
+    <color name="app_text_secondary">#D2D2D5</color>
+    <color name="app_text_muted">#B5B5B9</color>
+    <color name="app_text_label">#9D9DA3</color>
+    <color name="app_text_disabled">#77777D</color>
+    <color name="app_on_primary">#FFFFFF</color>
+
+    <color name="app_success">#66BB6A</color>
+    <color name="app_warning">#FFD166</color>
+    <color name="app_warning_surface">#3A2D12</color>
+    <color name="app_warning_text">#FFE0A3</color>
+    <color name="app_info_icon">#5E5E64</color>
+
+    <color name="nav_inactive">#A8A8AD</color>
+    <color name="theme_toggle_icon">#FFD166</color>
+    <color name="map_target_default">#B5B5B9</color>
+    <color name="map_target_centered">#4DA3FF</color>
+
+    <color name="map_marker_blue">#4DA3FF</color>
+    <color name="map_marker_green">#66BB6A</color>
+    <color name="map_marker_yellow">#FFD166</color>
+    <color name="map_marker_red">#FF6F61</color>
+
+    <color name="severity_critical_color">#FF6F61</color>
+    <color name="severity_urgent_color">#FFD166</color>
+    <color name="severity_stable_color">#66BB6A</color>
+    <color name="severity_info_color">#B5B5B9</color>
+    <color name="severity_critical_surface">#3A1716</color>
+    <color name="severity_urgent_surface">#3A2D12</color>
+    <color name="severity_stable_surface">#14331C</color>
+    <color name="severity_info_surface">#2A2A2D</color>
+</resources>

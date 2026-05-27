@@ -3,6 +3,7 @@ package com.example.myapplication.menu;
 import android.content.Context;
 import android.os.Bundle;
 
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -82,14 +83,16 @@ public class MenuFragment extends Fragment {
     private void rafraichirMenu() {
         for (int i = 0; i < tabs.length; i++) {
             boolean actif = (i == currentActivatedIndex);
+            int activeColor = ContextCompat.getColor(requireContext(), R.color.emergency_red);
+            int inactiveBackground = ContextCompat.getColor(requireContext(), R.color.app_surface);
+            int activeContent = ContextCompat.getColor(requireContext(), R.color.app_on_primary);
+            int inactiveContent = ContextCompat.getColor(requireContext(), R.color.nav_inactive);
 
-            // Fond : rouge si actif, blanc sinon
-            tabs[i].setBackgroundColor(actif ? 0xFFB71C1C : 0xFFFFFFFF);
+            tabs[i].setBackgroundColor(actif ? activeColor : inactiveBackground);
 
-            // Tint icône : blanc si actif, gris sinon
-            icons[i].setColorFilter(actif ? 0xFFFFFFFF : 0xFF888888);
+            icons[i].setColorFilter(actif ? activeContent : inactiveContent);
 
-            ((TextView) tabs[i].getChildAt(1)).setTextColor(actif ? 0xFFFFFFFF : 0xFF888888);
+            ((TextView) tabs[i].getChildAt(1)).setTextColor(actif ? activeContent : inactiveContent);
         }
     }
 
@@ -105,16 +108,16 @@ public class MenuFragment extends Fragment {
         hideAllTabs();
 
         if (ControlActivity.ROLE_RESCUE.equals(role)) {
-            configureTab(1, "BILAN", R.drawable.ic_menu_clipboard);
-            configureTab(3, "CARTE", R.drawable.ic_menu_location);
-            configureTab(4, "ALERTES", R.drawable.ic_menu_alert);
+            configureTab(1, R.string.title_summary, R.drawable.ic_menu_clipboard);
+            configureTab(3, R.string.menu_map, R.drawable.ic_menu_location);
+            configureTab(4, R.string.menu_alerts, R.drawable.ic_menu_alert);
             return;
         }
 
-        configureTab(0, "ACCUEIL", R.drawable.ic_header_home);
-        configureTab(1, "SIGNAL", R.drawable.ic_menu_alert);
-        configureTab(2, "SUIVI", R.drawable.ic_menu_clipboard);
-        configureTab(3, "CARTE", R.drawable.ic_menu_location);
+        configureTab(0, R.string.menu_home, R.drawable.ic_header_home);
+        configureTab(1, R.string.menu_signal, R.drawable.ic_menu_alert);
+        configureTab(2, R.string.menu_track, R.drawable.ic_menu_clipboard);
+        configureTab(3, R.string.menu_map, R.drawable.ic_menu_location);
     }
 
     private void hideAllTabs() {
@@ -123,9 +126,9 @@ public class MenuFragment extends Fragment {
         }
     }
 
-    private void configureTab(int index, String label, int iconRes) {
+    private void configureTab(int index, int labelRes, int iconRes) {
         setTabVisible(index, true);
-        setTabLabel(index, label);
+        setTabLabel(index, getString(labelRes));
         setTabIcon(index, iconRes);
     }
 

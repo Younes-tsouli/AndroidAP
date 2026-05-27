@@ -3,6 +3,8 @@ package com.example.myapplication.issue;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.example.myapplication.R;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +18,7 @@ public abstract class Issue implements Parcelable, IssueObservable {
     private Status status;
     private double longitude;
     private double latitude;
+    private String photoPath;
     
     private transient List<IssueObserver> observers = new ArrayList<>();
 
@@ -39,6 +42,7 @@ public abstract class Issue implements Parcelable, IssueObservable {
         status = Status.valueOf(in.readString());
         longitude = in.readDouble();
         latitude = in.readDouble();
+        photoPath = in.readString();
         observers = new ArrayList<>();
         addObserver(EmergencyService.getInstance());
     }
@@ -53,6 +57,7 @@ public abstract class Issue implements Parcelable, IssueObservable {
         dest.writeString(status.name());
         dest.writeDouble(longitude);
         dest.writeDouble(latitude);
+        dest.writeString(photoPath);
     }
 
     @Override
@@ -106,6 +111,9 @@ public abstract class Issue implements Parcelable, IssueObservable {
 
     public double getLatitude() { return latitude; }
     public double getLongitude() { return longitude; }
+    public String getPhotoPath() { return photoPath; }
+    public void setPhotoPath(String photoPath) { this.photoPath = photoPath; }
+    public boolean hasPhoto() { return photoPath != null && !photoPath.isEmpty(); }
     
     public Priority getPriority() { return priority; }
     public void setPriority(Priority priority) {
@@ -124,12 +132,15 @@ public abstract class Issue implements Parcelable, IssueObservable {
     // Méthode utilitaire pour l'UI
     public int getPriorityIcon() {
         switch (priority) {
-            case CRITICAL: return android.R.drawable.ic_delete; // A remplacer par tes ressources
-            case HIGH: return android.R.drawable.stat_notify_error;
-            case MEDIUM: return android.R.drawable.stat_sys_warning;
-            default: return android.R.drawable.ic_menu_info_details;
+            case CRITICAL:
+            case HIGH:
+                return R.drawable.ic_menu_alert;
+            case MEDIUM:
+                return R.drawable.emergency;
+            default:
+                return R.drawable.ic_menu_clipboard;
         }
     }
 
-    public abstract String getSafetyProtocol();
+    public abstract int getSafetyProtocolResId();
 }

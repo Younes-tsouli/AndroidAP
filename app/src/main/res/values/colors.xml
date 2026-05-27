@@ -2,22 +2,49 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="beige">#EDE8D0</color>
-    <color name="brown">#664228</color>
-    <color name="blue">#B9F3FA</color>
 
-    <color name="red">#971F0A</color>
     <color name="emergency_red">#B71C1C</color>
     <color name="emergency_red_dark">#8E0000</color>
+    <color name="emergency_red_soft">#C62828</color>
     <color name="emergency_red_light">#FFCDD2</color>
-    <color name="orange">#E69E17</color>
-    <color name="lime">#E1EB19</color>
-    <color name="green">#0EC822</color>
-    <color name="dark_blue">#0C6CCC</color>
-    <color name="purple">#5D39E4</color>
-    <color name="pink">#E011B0</color>
 
-    <color name="gray">#DCDADA</color>
-    <color name="light_gray">#F0EEEE</color>
+    <color name="app_background">#FAFAFA</color>
+    <color name="app_background_alt">#F2F2F2</color>
+    <color name="app_surface">#FFFFFF</color>
+    <color name="app_surface_variant">#F5F5F5</color>
+    <color name="app_surface_pressed">#EEEEEE</color>
+    <color name="app_border">#E0E0E0</color>
+    <color name="app_divider">#DCDADA</color>
 
+    <color name="app_text_primary">#212121</color>
+    <color name="app_text_secondary">#616161</color>
+    <color name="app_text_muted">#757575</color>
+    <color name="app_text_label">#9E9E9E</color>
+    <color name="app_text_disabled">#BDBDBD</color>
+    <color name="app_on_primary">#FFFFFF</color>
+
+    <color name="app_success">#2E7D32</color>
+    <color name="app_warning">#F9A825</color>
+    <color name="app_warning_surface">#FFF8E1</color>
+    <color name="app_warning_text">#E65100</color>
+    <color name="app_info_icon">#E0E0E0</color>
+
+    <color name="nav_inactive">#888888</color>
+    <color name="theme_toggle_icon">#B71C1C</color>
+    <color name="map_target_default">#757575</color>
+    <color name="map_target_centered">#008BFF</color>
+
+    <color name="map_marker_blue">#008BFF</color>
+    <color name="map_marker_green">#2E7D32</color>
+    <color name="map_marker_yellow">#F9A825</color>
+    <color name="map_marker_red">#C62828</color>
+
+    <color name="severity_critical_color">#C62828</color>
+    <color name="severity_urgent_color">#F9A825</color>
+    <color name="severity_stable_color">#2E7D32</color>
+    <color name="severity_info_color">#757575</color>
+    <color name="severity_critical_surface">#FFEBEE</color>
+    <color name="severity_urgent_surface">#FFF8E1</color>
+    <color name="severity_stable_surface">#E8F5E9</color>
+    <color name="severity_info_surface">#F5F5F5</color>
 </resources>

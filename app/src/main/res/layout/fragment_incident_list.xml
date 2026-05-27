@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="#FAFAFA"
+    android:background="@color/app_background"
     android:layout_marginTop="25sp">
 
     <!-- ── Top App Bar ── -->
@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="horizontal"
-        android:background="#FFFFFF"
+        android:background="@color/app_surface"
         android:paddingStart="20dp"
         android:paddingEnd="16dp"
         android:gravity="center_vertical"
@@ -22,15 +22,15 @@
         <View
             android:layout_width="4dp"
             android:layout_height="28dp"
-            android:background="#C62828"
+            android:background="@color/emergency_red"
             android:layout_marginEnd="12dp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="BILAN"
-            android:textColor="#C62828"
+            android:text="@string/title_summary"
+            android:textColor="@color/emergency_red"
             android:textSize="20sp"
             android:textStyle="bold"
             android:letterSpacing="0.08" />
@@ -39,7 +39,7 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:src="@drawable/emergency"
-            app:tint="#C62828" />
+            app:tint="@color/emergency_red" />
 
     </LinearLayout>
 
@@ -59,19 +59,19 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Incidents actifs"
+            android:text="@string/active_incidents"
             android:textSize="17sp"
             android:textStyle="bold"
-            android:textColor="#212121" />
+            android:textColor="@color/app_text_primary" />
 
         <TextView
             android:id="@+id/incidents_count_badge"
             android:layout_width="40dp"
             android:layout_height="32dp"
-            android:background="#C62828"
+            android:background="@color/emergency_red"
             android:gravity="center"
-            android:text="0"
-            android:textColor="#FFFFFF"
+            android:text="@string/placeholder_zero"
+            android:textColor="@color/app_on_primary"
             android:textSize="14sp"
             android:textStyle="bold"
             android:layout_marginEnd="8dp" />
@@ -87,8 +87,8 @@
         android:layout_weight="1"
         android:gravity="center"
         android:padding="24dp"
-        android:text="Aucun incident actif"
-        android:textColor="#616161"
+        android:text="@string/no_active_incidents"
+        android:textColor="@color/app_text_secondary"
         android:textSize="18sp"
         android:visibility="gone" />
 
@@ -97,7 +97,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:divider="#ffa0ca12"
+        android:divider="@color/app_divider"
         android:dividerHeight="3dp"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"

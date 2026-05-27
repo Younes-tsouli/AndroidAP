@@ -2,6 +2,8 @@ package com.example.myapplication.issue;
 
 import android.os.Parcel;
 
+import com.example.myapplication.R;
+
 public class UrbanIssue extends Issue {
 
     public static final Creator<UrbanIssue> CREATOR = new Creator<UrbanIssue>() {
@@ -25,7 +27,7 @@ public class UrbanIssue extends Issue {
     }
 
     @Override
-    public String getSafetyProtocol() {
-        return "Enfilez votre gilet de sécurité, balisez la zone avec un triangle à 30 mètres et prévenez les autres usagers.";
+    public int getSafetyProtocolResId() {
+        return R.string.protocol_urban;
     }
 }
